@@ -21,6 +21,10 @@ testCoords = {'X':(2,1),'A':(0,1),'B':(1,1),
 'C':(3,1),'D':(0,2),'E':(4,0),'F':(0,3),'G':(1,3),
 'H':(1,2),'I':(3,3),'J':(4,3),'K':(3,4),'L':(3,2),'Y':(2,5),
 }
+testCoords2 = {'X':(20,10),'A':(0,10),'B':(10,10),
+'C':(30,10),'D':(0,20),'E':(40,0),'F':(0,30),'G':(10,30),
+'H':(10,20),'I':(30,30),'J':(40,30),'K':(30,40),'L':(30,20),'Y':(20,50),
+}
 
 def setCosts(G,root):
     cost = dict()
@@ -33,11 +37,10 @@ def setCosts(G,root):
     return cost
 
 def h(node,target):
-    return ((testCoords[node][0] - testCoords[target][0])
-    + (testCoords[node][1] - testCoords[target][1]))
+    return (abs(testCoords[node][0] - testCoords[target][0])
+    + abs(testCoords[node][1] - testCoords[target][1]))
 
 def backtrack(costs,root,target):
-    print(costs[target])
     path = [target,f'Total Cost: {costs[target][2]}']
     node = target
     while node != root:
@@ -51,6 +54,7 @@ def aStar(G,root,target):
     Q.put((initialHCost,initialHCost,0,root))
     costs = setCosts(G,root)
     aStarHelper(G,target,Q,costs)
+    print(G.seen)
     return backtrack(costs,root,target)
 
 def aStarHelper(G,target,Q,costs):
@@ -59,6 +63,7 @@ def aStarHelper(G,target,Q,costs):
     else:
         (TCost,HCost,GCost,node) = Q.get()
         G.seen.add(node)
+        print(TCost,node)
         for neighbor in G.getNeighbors(node):
             if neighbor not in G.seen:
                 newGCost = GCost + G.getEdgeWeight(node,neighbor)
@@ -71,7 +76,7 @@ def aStarHelper(G,target,Q,costs):
 
 def main():
     G = Graph()
-    print(aStar(G,'X','Y'))
+    print(aStar(G,'L','A'))
 
 if (__name__ == '__main__'):
     main()

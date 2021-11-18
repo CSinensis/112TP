@@ -38,6 +38,7 @@ def dijkstra(G,root,target):
     Q.put((0,root))
     costs = setCosts(G,root)
     dijkHelper(G,target,Q,costs)
+    print(G.seen)
     return backtrackDijkstra(costs,root,target)
 
 def dijkHelper(G,target,Q,costs):
@@ -46,6 +47,7 @@ def dijkHelper(G,target,Q,costs):
     else:
         (cost,node) = Q.get()
         G.seen.add(node)
+        print(node)
         for neighbor in G.getNeighbors(node):
             if neighbor not in G.seen:
                 newCost = cost + G.getEdgeWeight(node,neighbor)
@@ -74,7 +76,7 @@ def dijkHelper(G,target,Q,costs):
         
 def main():
     G = Graph()
-    print(dijkstra(G,'X','Y'))
+    print(dijkstra(G,'L','A'))
 
 if (__name__ == '__main__'):
     main()
