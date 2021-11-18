@@ -22,8 +22,8 @@ def setCosts(G,root):
             cost[key] = (10000000000000000000,)
     return cost
 
-def getSortedDict(cost):
-    return dict(sorted(cost.items(),key=lambda cost: cost[1]))
+# def getSortedDict(cost):
+#     return dict(sorted(cost.items(),key=lambda cost: cost[1]))
 
 def backtrackDijkstra(costs,root,target):
     path = [target,f'Total Cost: {costs[target][0]}']

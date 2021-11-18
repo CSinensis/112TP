@@ -36,38 +36,42 @@ def h(node,target):
     return ((testCoords[node][0] - testCoords[target][0])
     + (testCoords[node][1] - testCoords[target][1]))
 
-def g(node,root):
-    return 
-    return
-
-def getSortedDict(cost):
-    return dict(sorted(cost.items(),key=lambda cost: cost[1]))
-
 def backtrack(costs,root,target):
-    path = [target,f'Total Cost: {costs[target][0]}']
+    print(costs[target])
+    path = [target,f'Total Cost: {costs[target][2]}']
     node = target
     while node != root:
-        node = costs[node][1]
+        node = costs[node][3]
         path.insert(0,node)
     return path
 
-def dijkstra(G,root,target):
+def aStar(G,root,target):
     Q = PriorityQueue()
-    Q.put((0,root))
+    initialHCost = h(root,target)
+    Q.put((initialHCost,initialHCost,0,root))
     costs = setCosts(G,root)
-    dijkHelper(G,target,Q,costs)
+    aStarHelper(G,target,Q,costs)
     return backtrack(costs,root,target)
 
-def dijkHelper(G,target,Q,costs):
+def aStarHelper(G,target,Q,costs):
     if target in G.seen:
         return
     else:
-        (cost,node) = Q.get()
+        (TCost,HCost,GCost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):
             if neighbor not in G.seen:
-                newCost = cost + G.getEdgeWeight(node,neighbor)
-                if newCost < costs[neighbor][0]:
-                    Q.put((newCost,neighbor))
-                    costs[neighbor] = (newCost,node)
-        dijkHelper(G,target,Q,costs)
+                newGCost = GCost + G.getEdgeWeight(node,neighbor)
+                newHCost = h(neighbor,target)
+                newTCost = newGCost + newHCost
+                if newTCost < costs[neighbor][0]:
+                    Q.put((newTCost,newHCost,newGCost,neighbor))
+                    costs[neighbor] = (newTCost,newHCost,newGCost,node)
+        aStarHelper(G,target,Q,costs)
+
+def main():
+    G = Graph()
+    print(aStar(G,'X','Y'))
+
+if (__name__ == '__main__'):
+    main()
