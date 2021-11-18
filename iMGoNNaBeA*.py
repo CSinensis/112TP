@@ -32,10 +32,18 @@ def setCosts(G,root):
             cost[key] = (10000000000000000000,)
     return cost
 
+def h(node,target):
+    return ((testCoords[node][0] - testCoords[target][0])
+    + (testCoords[node][1] - testCoords[target][1]))
+
+def g(node,root):
+    return 
+    return
+
 def getSortedDict(cost):
     return dict(sorted(cost.items(),key=lambda cost: cost[1]))
 
-def backtrackDijkstra(costs,root,target):
+def backtrack(costs,root,target):
     path = [target,f'Total Cost: {costs[target][0]}']
     node = target
     while node != root:
@@ -48,7 +56,7 @@ def dijkstra(G,root,target):
     Q.put((0,root))
     costs = setCosts(G,root)
     dijkHelper(G,target,Q,costs)
-    return backtrackDijkstra(costs,root,target)
+    return backtrack(costs,root,target)
 
 def dijkHelper(G,target,Q,costs):
     if target in G.seen:
