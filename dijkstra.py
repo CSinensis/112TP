@@ -10,6 +10,8 @@ Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm:
 https://www.youtube.com/watch?v=pVfj6mxhdMw
 Priority Queue:
 https://www.educative.io/edpresso/what-is-the-python-priority-queue
+Wikipedia:
+
 """
 
 def setCosts(G,root):
