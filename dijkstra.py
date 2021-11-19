@@ -1,9 +1,10 @@
 from graphClass import *
-#can i even use this?
 from queue import PriorityQueue
 
 """
-Sources:
+References:
+TA Mini-Lecture:
+https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
 Dijkstra's Algorithm - Computerphile: 
 https://www.youtube.com/watch?v=GazC3A4OQTE
 Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm: 
@@ -11,7 +12,7 @@ https://www.youtube.com/watch?v=pVfj6mxhdMw
 Priority Queue:
 https://www.educative.io/edpresso/what-is-the-python-priority-queue
 Wikipedia:
-
+https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 """
 
 def setCosts(G,root):
@@ -23,9 +24,6 @@ def setCosts(G,root):
             #help
             cost[key] = (10000000000000000000,)
     return cost
-
-# def getSortedDict(cost):
-#     return dict(sorted(cost.items(),key=lambda cost: cost[1]))
 
 def backtrackDijkstra(costs,root,target):
     path = [target,f'Total Cost: {costs[target][0]}']

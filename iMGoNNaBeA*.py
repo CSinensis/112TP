@@ -1,5 +1,16 @@
 from graphClass import *
 from queue import PriorityQueue
+"""
+References:
+TA Mini-Lecture:
+https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
+Wikipedia:
+https://en.wikipedia.org/wiki/A*_search_algorithm
+A* Pathfinding (E01: algorithm explanation):
+https://www.youtube.com/watch?v=-L-WgKMFuhE
+Graph Data Structure 6. The A* Pathfinding Algorithm:
+https://www.youtube.com/watch?v=eSOJ3ARN5FM
+"""
 largerTestGraph = {
     'X':{'E':4,'A':7,'B':2,'C':3},
     'A':{'X':7,'B':3,'D':4},

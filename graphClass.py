@@ -24,6 +24,8 @@ largerTestGraph = {
     'Y':{'G':2,'K':5},
 }
 
+# Referenced the 15112 mini-lecture slides
+# https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
 class Graph(object):
     def __init__(self):
         # self.graph = dict()

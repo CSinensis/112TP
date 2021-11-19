@@ -1,5 +1,16 @@
 from graphClass import *
 
+"""
+References:
+TA Mini-Lecture:
+https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
+Wikipedia:
+https://en.wikipedia.org/wiki/Breadth-first_search
+Breadth First Search (BFS): Visualized and Explained
+https://www.youtube.com/watch?v=xlVX7dXLS64
+15122 Notes (thanks Adhvik!):
+https://www.cs.cmu.edu/~15122/handouts/24-dfs.pdf
+"""
 #start w/root node in queue and in seen
 #loop through nodes in queue (START AT THE FRONT)
 #if node is target, return path
@@ -22,7 +33,6 @@ def BFS(graph,root,target):
 
 def BFSHelper(graph,root,target,Q,path):
     node = Q.pop(0)
-    # path.append(node)
     if node == target:
         return backtrack(path,root,target)
     else:
