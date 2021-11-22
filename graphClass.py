@@ -27,9 +27,9 @@ largerTestGraph = {
 # Referenced the 15112 mini-lecture slides
 # https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
 class Graph(object):
-    def __init__(self):
+    def __init__(self,graph):
         # self.graph = dict()
-        self.graph = largerTestGraph
+        self.graph = graph
         self.seen = set()
     
     def __repr__(self):
@@ -55,3 +55,42 @@ class Graph(object):
         for neighbor in self.getNeighbors(node):
             L.append((self.getEdgeWeight(node,neighbor),neighbor))
         return sorted(L)
+
+class Node(object):
+    def __init__(self,x,y,label):
+        self.x = x
+        self.y = y
+        self.r = 10
+        self.label = label
+        self.color = 'red'
+
+    def __repr__(self):
+        return f'{self.label}'
+    
+    def __eq__(self,other):
+        return isinstance(other,Node) and self.label == other.label
+
+    def getHashables(self):
+        return (self.x,self.y,self.r,self.label)
+    
+    def __hash__(self):
+        return hash(self.getHashables())
+    
+A = Node(4,2,'A')
+B = Node(3,4,'B')
+C = Node(5,4,'C')
+D = Node(7,4,'D')
+E = Node(4,6,'E')
+F = Node(6,6,'F')
+testGraph = {
+    A:{B:2,C:4,D:3},
+    B:{A:2},
+    C:{A:4,E:5,F:2},
+    D:{A:3,F:8},
+    E:{C:5},
+    F:{D:8,C:5}
+}
+
+G = Graph(testGraph)
+
+print(G.getNeighbors(A))
