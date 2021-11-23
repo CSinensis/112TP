@@ -5,20 +5,6 @@ from visualizeBFS import *
 from createCustom import *
 from splashscreen import *
 
-
-##########################################
-# Help Mode
-##########################################
-
-def helpMode_redrawAll(app, canvas):
-    font = 'Arial 26 bold'
-    canvas.create_text(app.width/2, 150, text='This is the help screen!', font=font)
-    canvas.create_text(app.width/2, 250, text='(Insert helpful message here)', font=font)
-    canvas.create_text(app.width/2, 350, text='Press any key to return to the game!', font=font)
-
-def helpMode_keyPressed(app, event):
-    app.mode = 'gameMode'
-
 ##########################################
 # Main App
 ##########################################
@@ -42,7 +28,7 @@ def appStarted(app):
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
     app.gMode = 'HC1'
     splashStarted(app)
-    #reset(app)
+    # reset(app)
     # resetCustom(app)
 
 runApp(width=800,height=600)

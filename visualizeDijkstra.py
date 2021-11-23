@@ -22,6 +22,8 @@ def dijk_mousePressed(app,event):
     elif inCustomBounds(app,event.x,event.y):
         app.mode = 'create'
         resetCustom(app)
+    elif inResetBounds(app,event.x,event.y):
+        reset(app)
     else:
         toggleOptions(app,event.x,event.y)
 

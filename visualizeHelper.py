@@ -276,6 +276,21 @@ def drawButtons(app,canvas):
     drawStepBackward(app,canvas)
     drawStepAuto(app,canvas)
 
+def inResetBounds(app,x,y):
+    startW,startH,endW,endH = getResetBounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
+def getResetBounds(app):
+    startW,startH = 2*(app.screenMargin + app.gM) + app.bW*10,app.screenMargin + app.gM
+    endW = app.width-app.screenMargin - app.gM
+    fill,endH = gridToCoord(app,10,-1)
+    return startW,startH,endW,endH
+
+def drawReset(app,canvas):
+    startW,startH,endW,endH = getResetBounds(app)
+    canvas.create_rectangle(startW,startH,endW,endH)
+    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Reset')    
+
 def drawGrid(app,canvas):
     width = app.bW
     height = app.bH
@@ -297,6 +312,8 @@ def drawAll(app,canvas):
     drawModes(app,canvas)
     drawGraphOptions(app,canvas)
     drawCustom(app,canvas)
+    drawReset(app,canvas)
+
 # def drawOtherGrid(app,canvas):
 #     width = app.bW
 #     height = app.bH
