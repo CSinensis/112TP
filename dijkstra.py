@@ -29,6 +29,8 @@ def backtrackDijkstra(costs,root,target):
     path = [target,f'Total Cost: {costs[target][0]}']
     node = target
     while node != root:
+        print(node)
+        print(costs)
         node = costs[node][1]
         path.insert(0,node)
     return path

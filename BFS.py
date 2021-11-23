@@ -43,7 +43,7 @@ def backtrack(path,start,end):
 def BFS(graph,root,target):
     Q,path = [root],dict()
     graph.seen.add(root)
-    cache = [({root},dict(),root)]
+    cache = [({root},dict(),root,copy.deepcopy(Q))]
     return BFSHelper(graph,root,target,Q,path,cache)
 
 def BFSHelper(graph,root,target,Q,path,cache):
@@ -60,7 +60,7 @@ def BFSHelper(graph,root,target,Q,path,cache):
                 graph.seen.add(i)
                 path[node] = path.get(node,set())
                 path[node].add(i)
-                cache.append((copy.copy(graph.seen),copy.deepcopy(path),i))
+                cache.append((copy.copy(graph.seen),copy.deepcopy(path),i,copy.deepcopy(Q)))
         return BFSHelper(graph,root,target,Q,path,cache)
 
 # NON RECURSIVE IN CASE BECAUSE I HATE MYSELF

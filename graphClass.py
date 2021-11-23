@@ -69,6 +69,9 @@ class Node(object):
     
     def __eq__(self,other):
         return isinstance(other,Node) and self.label == other.label
+    
+    def __lt__(self,other):
+        return self.label < other.label
 
     def getHashables(self):
         return (self.x,self.y,self.r,self.label)

@@ -1,8 +1,26 @@
 from cmu_112_graphics import *
 from graphClass import *
-from dijkstra import *
+from BFS import *
 from visualizeHelper import *
 
+# A = Node(4,2,'A')
+# B = Node(3,4,'B')
+# C = Node(5,4,'C')
+# D = Node(7,4,'D')
+# E = Node(4,6,'E')
+# F = Node(6,6,'F')
+# G = Node(7,8,'G')
+# H = Node(3,7,'H')
+# # testGraph = {
+# #     A:{B:2,C:4,D:3},
+# #     B:{A:2},
+# #     C:{A:4,E:5,F:2},
+# #     D:{A:3,F:8},
+# #     E:{C:5,H:6},
+# #     F:{D:8,C:5,G:3},
+# #     G:{F:3},
+# #     H:{E:6}
+# # }
 # testGraph = {
 #     A:{B:2,C:4,D:3},
 #     B:{A:2},
@@ -12,7 +30,7 @@ from visualizeHelper import *
 #     F:{D:8,C:5}
 # }
 
-def dijk_mousePressed(app,event):
+def BFS_mousePressed(app,event):
     if inBounds(app,event.x,event.y) and app.editingMode:
         col = int((event.x - app.screenMargin + app.bW/2)/app.bW)
         row = int((event.y - 1/4*(app.height-2*app.screenMargin) + app.screenMargin + app.bH/2)/app.bH)
@@ -43,8 +61,8 @@ def dijk_mousePressed(app,event):
         applyState(app)
     elif inAutoBounds(app,event.x,event.y):
         app.auto = not app.auto
-    
-def dijk_keyPressed(app,event):
+
+def BFS_keyPressed(app,event):
     if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
         app.step += 1
         applyState(app)
@@ -52,36 +70,26 @@ def dijk_keyPressed(app,event):
         app.step -= 1
         applyState(app)
     elif event.key == 't':
-        app.mode = 'BFS'
+        app.mode = 'dijk'
         app.cache = None
         reset(app)
+        print(app.cache)
     elif event.key == 'r':
         reset(app)
-        print(app.edges)
-        print(app.nodes)
-
-def dijk_timerFired(app):
-    if app.auto and (app.cache == None or app.step < len(app.cache)):
-        app.step += 1
-        applyState(app)
-    elif app.cache != None and app.step < len(app.cache):
-        app.auto = False
 
 def applyState(app):
     if app.cache == None:
-        blah,app.cache = dijkstra(app.G,app.startNode,app.endNode)
+        blah,app.cache = BFS(app.G,app.startNode,app.endNode)
     if app.step < len(app.cache):
         state = app.cache[app.step]
-        seen,costs,current,check,Q = state
-        edges = pathToEdges(app,costs,current)
+        seen,path,current,Q = state
+        edges = pathToEdges(app,path,current)
         app.Q = Q
         for node in app.nodes:
             if node == current:
                 node.color = 'green'
             elif node in seen:
                 node.color = 'grey'
-            elif node == check:
-                node.color = 'blue'
             else:
                 node.color = 'red'
         for edge in app.edges:
@@ -90,13 +98,21 @@ def applyState(app):
             else:
                 edge.color = 'black'
 
-def pathToEdges(app,costs,current):
+def BFS_timerFired(app):
+    if app.auto and (app.cache == None or app.step < len(app.cache)):
+        app.step += 1
+        applyState(app)
+    elif app.cache != None and app.step < len(app.cache):
+        app.auto = False
+
+def pathToEdges(app,path,current):
     edges = set()
     node = current
     while node != app.startNode:
-        key = costs[node][1]
-        edges.add((key,node))
-        node = key
+        for key in path:
+            if node in path[key]:
+                edges.add((key,node))
+                node = key
     return edges
 
 def drawEdges(app,canvas):
@@ -106,7 +122,6 @@ def drawEdges(app,canvas):
         x2,y2 = gridToCoord(app,n2.x,n2.y)
         avgX,avgY = (x1+x2)/2,(y1+y2)/2
         canvas.create_line(x1,y1,x2,y2,fill=edge.color)
-        canvas.create_text(avgX,avgY,text=f'{edge.weight}')
 
 def drawNodes(app,canvas):
     for node in app.nodes:
@@ -115,10 +130,11 @@ def drawNodes(app,canvas):
         canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
         canvas.create_text(cx,cy,text=f'{node.label}')
 
-def dijk_redrawAll(app,canvas):
+def BFS_redrawAll(app,canvas):
     drawGrid(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
     drawQueue(app,canvas)
     drawButtons(app,canvas)
-    #drawOtherGrid(app,canvas)
+    return
+
