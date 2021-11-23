@@ -41,14 +41,17 @@ def backtrack(path,start,end):
     return list(reversed(actualpath))
     
 def BFS(graph,root,target):
-    cache = []
     Q,path = [root],dict()
     graph.seen.add(root)
+    cache = [({root},dict(),root)]
     return BFSHelper(graph,root,target,Q,path,cache)
 
 def BFSHelper(graph,root,target,Q,path,cache):
     node = Q.pop(0)
     if node == target:
+        while cache[-1][2] != target:
+            cache.pop()
+        print(cache)
         return backtrack(path,root,target),cache
     else:
         for i in graph.getNeighbors(node):
@@ -57,7 +60,6 @@ def BFSHelper(graph,root,target,Q,path,cache):
                 graph.seen.add(i)
                 path[node] = path.get(node,set())
                 path[node].add(i)
-                print(path)
                 cache.append((copy.copy(graph.seen),copy.deepcopy(path),i))
         return BFSHelper(graph,root,target,Q,path,cache)
 

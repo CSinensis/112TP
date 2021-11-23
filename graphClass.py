@@ -75,13 +75,32 @@ class Node(object):
     
     def __hash__(self):
         return hash(self.getHashables())
+
+class Edge(object):
+    def __init__(self,start,end):
+        self.path = (start,end)
+        self.color = 'black'
+        self.weight = 1
+
+    def __eq__(self,other):
+        return isinstance(other,Edge) and set(self.path) == set(other.path)
     
+    def __repr__(self):
+        return f'{self.path}'
+
+    def getHashables(self):
+        return (self.path)
+
+    def __hash__(self):
+        return hash(self.getHashables)
+
 A = Node(4,2,'A')
 B = Node(3,4,'B')
 C = Node(5,4,'C')
 D = Node(7,4,'D')
 E = Node(4,6,'E')
 F = Node(6,6,'F')
+
 testGraph = {
     A:{B:2,C:4,D:3},
     B:{A:2},

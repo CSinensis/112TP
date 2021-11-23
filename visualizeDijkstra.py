@@ -1,6 +1,5 @@
 from cmu_112_graphics import *
 from graphClass import *
-from BFS import *
 from dijkstra import *
 
 A = Node(4,2,'A')
@@ -96,11 +95,13 @@ def keyPressed(app,event):
     if event.key == 's':
         if app.step < len(app.cache):
             state = app.cache[app.step]
-            seen,path,current,Q = state
-            edges = pathToEdges(app,path,current)
+            seen,costs,current,check,Q = state
+            edges = pathToEdges(app,costs,current)
             for node in app.nodes:
                 if node == current:
                     node.color = 'green'
+                elif node == check:
+                    node.color = 'blue'
                 elif node in seen:
                     node.color = 'grey'
             for edge in app.edges:
@@ -110,14 +111,12 @@ def keyPressed(app,event):
                     edge.color = 'black'
             app.step += 1
 
-def pathToEdges(app,path,current):
+def pathToEdges(app,costs,current):
     edges = set()
     node = current
     while node != app.startNode:
-        for key in path:
-            if node in path[key]:
-                edges.add((key,node))
-                node = key
+        key = costs[node][1]
+        edges.add((key,node))
     return edges
 
 def gridToCoord(app,x,y):
