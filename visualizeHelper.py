@@ -1,22 +1,50 @@
 from cmu_112_graphics import *
 from graphClass import *
 
+def rgbString(r, g, b):
+    return f'#{r:02x}{g:02x}{b:02x}'
+
+myBlue = rgbString(0, 159, 183)
+myYellow = rgbString(254, 215, 102)
+myGreen = rgbString(104, 163, 87)
+myRed = rgbString(109, 33, 60)
+
+def resetCustom(app):
+    app.customGraph = Graph(dict())
+    app.grid = [[None]*app.gC for row in range(app.gR)]
+    app.edgeMode = False
+    app.prevNode = None
+    app.nodes = []
+    app.edges = []
+    # app.step = 0
+    # app.cache = None
+    app.Q = []
+    # app.auto = False
+    app.customMessage = '''Click here to exit 
+    editing mode'''
+
 def reset(app):
     if app.gMode == 'HC1':
         app.G,app.startNode,app.endNode = getHardcoded1()
     elif app.gMode == 'HC2':
         app.G,app.startNode,app.endNode = getHardcoded2()
+    elif app.gMode == 'custom':
+        app.G,app.startNode,app.endNode = getCustom(app)
     app.grid = [[None]*app.gC for row in range(app.gR)]
-    app.edgeMode = False
-    app.editingMode = True
-    app.prevNode = None
+    # app.edgeMode = False
+    # app.prevNode = None
     app.nodes = []
     app.edges = []
     app.step = 0
     app.cache = None
     app.Q = []
     app.auto = False
+    app.customMessage = ('''Click here to create
+    a custom graph''')
     setGraph(app)
+
+def getCustom(app):
+    return copy.deepcopy(app.customGraph),app.startNode,app.endNode
 
 def getHardcoded1():
     A = Node(4,2,'A')
@@ -67,6 +95,24 @@ def setGraph(app):
                 app.edges.append(newEdge)
         seen.add(node)
 
+def toggleOptions(app,x,y):
+    if inAutoBounds(app,x,y):
+        app.auto = not app.auto
+    elif inDijkBounds(app,x,y):
+        app.mode = 'dijk'
+        app.cache = None
+        reset(app)
+    elif inBFSBounds(app,x,y):
+        app.mode = 'BFS'
+        app.cache = None
+        reset(app)
+    elif inHC1Bounds(app,x,y):
+        app.gMode = 'HC1'
+        reset(app)
+    elif inHC2Bounds(app,x,y):
+        app.gMode = 'HC2'
+        reset(app)
+
 def inBounds(app,x,y):
     return ((app.screenMargin + app.bW/2 <= x <= app.screenMargin - app.bW/2 + app.gridWidth) and
     (1/4*(app.height-2*app.screenMargin) - app.screenMargin + app.bH/2 <= y <= app.height - (app.screenMargin + app.bH/2)))
@@ -91,6 +137,10 @@ def inDijkBounds(app,x,y):
     startW,startH,endW,endH = getDijkModeBounds(app)
     return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
 
+def inCustomBounds(app,x,y):
+    startW,startH,endW,endH = getCustomBounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
 def gridToCoord(app,x,y):
     coordX = x*app.bW + app.screenMargin + app.gM
     coordY = y*app.bH + 1/4*(app.height-2*app.screenMargin) - app.screenMargin + app.gM
@@ -104,26 +154,77 @@ def getModeBounds(app):
 def getBFSModeBounds(app):
     startW,startH,endW,endH = getModeBounds(app)
     midH = (startH + endH)/2
-    return startW,midH,endW,endH
+    return startW,startH,endW,midH
 
 def getDijkModeBounds(app):
     startW,startH,endW,endH = getModeBounds(app)
     midH = (startH + endH)/2
-    return startW,startH,endW,midH
+    return startW,midH,endW,endH
+
+def getCustomBounds(app):
+    startW,startH = app.screenMargin + app.gM + app.bW*8,app.screenMargin + app.gM
+    endW,endH = gridToCoord(app,10,-1)
+    return startW,startH,endW,endH
+
+def drawCustom(app,canvas):
+    startW,startH,endW,endH = getCustomBounds(app)
+    if app.mode == 'create':
+        c = myGreen
+    else:
+        c = 'grey'
+    canvas.create_rectangle(startW,startH,endW,endH,fill=c)
+    canvas.create_text((startW+endW)/2,(startH+endH)/2,text=app.customMessage)
 
 def drawModes(app,canvas):
     startW,startH,endW,endH = getModeBounds(app)
     midH = (startH + endH)/2
     if app.mode == 'BFS':
-        c1,c2 = 'green','grey'
+        c1,c2 = myGreen,'grey'
     elif app.mode == 'dijk':
-        c1,c2 = 'grey','green'
+        c1,c2 = 'grey',myGreen
     else:
         c1,c2 = 'grey','grey'
     canvas.create_rectangle(startW,startH,endW,midH,outline='black',fill=c1)
     canvas.create_text((startW+endW)/2,(startH+midH)/2,text='BFS')
     canvas.create_rectangle(startW,midH,endW,endH,outline='black',fill=c2)
     canvas.create_text((startW+endW)/2,(midH+endH)/2,text="Dijkstra's")
+
+def getOptBounds(app):
+    startW,startH = app.screenMargin + app.gM + 4*(app.bW),app.screenMargin + app.gM
+    endW,endH = gridToCoord(app,7,-1)
+    return startW,startH,endW,endH
+
+def inHC1Bounds(app,x,y):
+    startW,startH,endW,endH = getHC1Bounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
+def inHC2Bounds(app,x,y):
+    startW,startH,endW,endH = getHC2Bounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
+def getHC1Bounds(app):
+    startW,startH,endW,endH = getOptBounds(app)
+    midH = (startH + endH)/2
+    return startW,startH,endW,midH
+
+def getHC2Bounds(app):
+    startW,startH,endW,endH = getOptBounds(app)
+    midH = (startH + endH)/2
+    return startW,midH,endW,endH
+
+def drawGraphOptions(app,canvas):
+    startW,startH,endW,midH = startW,startH,endW,endH = getOptBounds(app)
+    midH = (startH + endH)/2
+    if app.gMode == 'HC1':
+        c1,c2 = myGreen,'grey'
+    elif app.gMode == 'HC2':
+        c1,c2 = 'grey',myGreen
+    else:
+        c1,c2 = 'grey','grey'
+    canvas.create_rectangle(startW,startH,endW,midH,outline='black',fill=c1)
+    canvas.create_text((startW+endW)/2,(startH+midH)/2,text='Hardcoded 1')
+    canvas.create_rectangle(startW,midH,endW,endH,outline='black',fill=c2)
+    canvas.create_text((startW+endW)/2,(midH+endH)/2,text='Hardcoded 2')
 
 def drawQueue(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
@@ -189,6 +290,13 @@ def drawGrid(app,canvas):
                 margin+gridStartWidth+width*(col+1),
                 margin+gridStartHeight+height*(row+1),outline='grey')
 
+def drawAll(app,canvas):
+    drawGrid(app,canvas)
+    drawQueue(app,canvas)
+    drawButtons(app,canvas)
+    drawModes(app,canvas)
+    drawGraphOptions(app,canvas)
+    drawCustom(app,canvas)
 # def drawOtherGrid(app,canvas):
 #     width = app.bW
 #     height = app.bH

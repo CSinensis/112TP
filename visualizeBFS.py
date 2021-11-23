@@ -31,44 +31,17 @@ from visualizeHelper import *
 # }
 
 def BFS_mousePressed(app,event):
-    if inBounds(app,event.x,event.y) and app.editingMode:
-        col = int((event.x - app.screenMargin + app.bW/2)/app.bW)
-        row = int((event.y - 1/4*(app.height-2*app.screenMargin) + app.screenMargin + app.bH/2)/app.bH)
-        if app.grid[col][row] != None:
-            if app.edgeMode != True:
-                app.edgeMode = True
-                app.prevNode = app.grid[col][row]
-            else:
-                app.edgeMode = False
-                newEdge = Edge(app.grid[col][row],app.prevNode)
-                app.edges.append(newEdge)
-        else:
-            newNode = Node(col,row,f'{len(app.nodes)}')
-            app.nodes.append(newNode)
-            app.grid[col][row] = newNode
-            if app.edgeMode != True:
-                app.edgeMode = True
-                app.prevNode = newNode
-            else:
-                app.edgeMode = False
-                newEdge = Edge(newNode,app.prevNode)
-                app.edges.append(newEdge)
-    elif inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
+    if inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
         app.step += 1
         applyState(app)
     elif inBackBounds(app,event.x,event.y) and app.step > 0:
         app.step -= 1
         applyState(app)
-    elif inAutoBounds(app,event.x,event.y):
-        app.auto = not app.auto
-    elif inDijkBounds(app,event.x,event.y):
-        app.mode = 'BFS'
-        app.cache = None
-        reset(app)
-    elif inBFSBounds(app,event.x,event.y):
-        app.mode = 'dijk'
-        app.cache = None
-        reset(app)
+    elif inCustomBounds(app,event.x,event.y):
+        app.mode = 'create'
+        resetCustom(app)
+    else:
+        toggleOptions(app,event.x,event.y)
 
 def BFS_keyPressed(app,event):
     if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
@@ -99,14 +72,14 @@ def applyState(app):
         app.Q = Q
         for node in app.nodes:
             if node == current:
-                node.color = 'green'
+                node.color = myGreen
             elif node in seen:
                 node.color = 'grey'
             else:
                 node.color = 'red'
         for edge in app.edges:
             if edge.path in edges:
-                edge.color = 'green'
+                edge.color = myGreen
             else:
                 edge.color = 'black'
 
@@ -143,11 +116,7 @@ def drawNodes(app,canvas):
         canvas.create_text(cx,cy,text=f'{node.label}')
 
 def BFS_redrawAll(app,canvas):
-    drawGrid(app,canvas)
+    drawAll(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
-    drawQueue(app,canvas)
-    drawButtons(app,canvas)
-    drawModes(app,canvas)
-    return
 
