@@ -29,8 +29,6 @@ def backtrackDijkstra(costs,root,target):
     path = [target,f'Total Cost: {costs[target][0]}']
     node = target
     while node != root:
-        print(node)
-        print(costs)
         node = costs[node][1]
         path.insert(0,node)
     return path
@@ -42,7 +40,6 @@ def dijkstra(G,root,target):
     path = dict()
     cache = [({root},copy.deepcopy(costs),root,root,[])]
     dijkHelper(G,target,Q,costs,path,cache)
-    print(cache)
     return backtrackDijkstra(costs,root,target),cache
 
 def dijkHelper(G,target,Q,costs,path,cache):
@@ -52,11 +49,15 @@ def dijkHelper(G,target,Q,costs,path,cache):
         (cost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):
-            cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(Q.queue)))
+            cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
             if neighbor not in G.seen:
                 newCost = cost + G.getEdgeWeight(node,neighbor)
                 if newCost < costs[neighbor][0]:
+                    if costs[neighbor][0] != float('inf'):
+                        Q.queue.remove((costs[neighbor][0],neighbor))
+                        print("HEHREGKSJDBKEJGDBKJSBDKVJBSDKJBKDGJB")
                     Q.put((newCost,neighbor))
+                    print(Q.queue)
                     costs[neighbor] = (newCost,node)
                 path[node] = path.get(node,set())
                 path[node].add(neighbor)

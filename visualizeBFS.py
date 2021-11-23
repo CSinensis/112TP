@@ -61,6 +61,14 @@ def BFS_mousePressed(app,event):
         applyState(app)
     elif inAutoBounds(app,event.x,event.y):
         app.auto = not app.auto
+    elif inDijkBounds(app,event.x,event.y):
+        app.mode = 'BFS'
+        app.cache = None
+        reset(app)
+    elif inBFSBounds(app,event.x,event.y):
+        app.mode = 'dijk'
+        app.cache = None
+        reset(app)
 
 def BFS_keyPressed(app,event):
     if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
@@ -75,6 +83,10 @@ def BFS_keyPressed(app,event):
         reset(app)
         print(app.cache)
     elif event.key == 'r':
+        reset(app)
+    elif event.key == 'n':
+        print("HERE")
+        app.gMode = 'HC2'
         reset(app)
 
 def applyState(app):
@@ -136,5 +148,6 @@ def BFS_redrawAll(app,canvas):
     drawNodes(app,canvas)
     drawQueue(app,canvas)
     drawButtons(app,canvas)
+    drawModes(app,canvas)
     return
 

@@ -43,6 +43,14 @@ def dijk_mousePressed(app,event):
         applyState(app)
     elif inAutoBounds(app,event.x,event.y):
         app.auto = not app.auto
+    elif inDijkBounds(app,event.x,event.y):
+        app.mode = 'BFS'
+        app.cache = None
+        reset(app)
+    elif inBFSBounds(app,event.x,event.y):
+        app.mode = 'dijk'
+        app.cache = None
+        reset(app)
     
 def dijk_keyPressed(app,event):
     if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
@@ -57,8 +65,10 @@ def dijk_keyPressed(app,event):
         reset(app)
     elif event.key == 'r':
         reset(app)
-        print(app.edges)
-        print(app.nodes)
+    elif event.key == 'n':
+        print("HERE")
+        app.gMode = 'HC2'
+        reset(app)
 
 def dijk_timerFired(app):
     if app.auto and (app.cache == None or app.step < len(app.cache)):
@@ -69,9 +79,11 @@ def dijk_timerFired(app):
 
 def applyState(app):
     if app.cache == None:
+        print(app.G,app.startNode,app.endNode)
         blah,app.cache = dijkstra(app.G,app.startNode,app.endNode)
     if app.step < len(app.cache):
         state = app.cache[app.step]
+        print(state)
         seen,costs,current,check,Q = state
         edges = pathToEdges(app,costs,current)
         app.Q = Q
@@ -121,4 +133,5 @@ def dijk_redrawAll(app,canvas):
     drawNodes(app,canvas)
     drawQueue(app,canvas)
     drawButtons(app,canvas)
+    drawModes(app,canvas)
     #drawOtherGrid(app,canvas)

@@ -2,6 +2,7 @@ from cmu_112_graphics import *
 from graphClass import *
 from visualizeDijkstra import *
 from visualizeBFS import *
+from splashscreen import *
 
 
 ##########################################
@@ -35,9 +36,10 @@ def getScreenParams(app):
     return (screenMargin,gridWidth,gridHeight)
 
 def appStarted(app):
-    app.mode = 'BFS'
+    app.mode = 'dijk'
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
+    app.gMode = 'HC1'
     reset(app)
 
 runApp(width=800,height=600)
