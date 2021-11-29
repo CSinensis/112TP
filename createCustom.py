@@ -37,9 +37,8 @@ def create_mousePressed(app,event):
 
 def create_keyPressed(app,event):
     if event.key == 's':
-        app.mode = 'BFS'
-        app.startNode,app.endNode = app.nodes[0],app.nodes[-1]
-        reset(app)
+        app.savedGraphs.append(copy.deepcopy(app.customGraph))
+    
 
 def drawEdges(app,canvas):
     for edge in app.edges:

@@ -6,6 +6,7 @@ from visualizeAStar import *
 from createCustom import *
 from splashscreen import *
 from help import *
+from gallery import *
 
 ##########################################
 # Main App
@@ -25,11 +26,15 @@ def getScreenParams(app):
     return (screenMargin,gridWidth,gridHeight)
 
 def appStarted(app):
-    app.mode = 'ss'
+    G1,f,g = getHardcoded1()
+    G2,r,w = getHardcoded2()
+    app.mode = 'gal'
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
     app.gMode = 'HC1'
-    splashStarted(app)
+    app.savedGraphs = [G1,G2]
+    #splashStarted(app)
+    galStarted(app)
     # reset(app)
     # resetCustom(app)
 
@@ -48,4 +53,5 @@ Things to Fix:
 - Make Queue clearer
 - Make weights based on manhattan distance + factor
 - fix dijk so that it ends on first instance of seen
+- Add option to choose start and end node
 '''
