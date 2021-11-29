@@ -25,7 +25,7 @@ def setCosts(G,root):
             cost[key] = (inf,)
     return cost
 
-def backtrackDijkstra(costs,root,target):
+def backtrackDijkstra(costs,root,target): 
     path = [target,f'Total Cost: {costs[target][0]}']
     node = target
     while node != root:
@@ -55,9 +55,7 @@ def dijkHelper(G,target,Q,costs,path,cache):
                 if newCost < costs[neighbor][0]:
                     if costs[neighbor][0] != float('inf'):
                         Q.queue.remove((costs[neighbor][0],neighbor))
-                        print("HEHREGKSJDBKEJGDBKJSBDKVJBSDKJBKDGJB")
                     Q.put((newCost,neighbor))
-                    print(Q.queue)
                     costs[neighbor] = (newCost,node)
                 path[node] = path.get(node,set())
                 path[node].add(neighbor)

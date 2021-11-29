@@ -1,5 +1,14 @@
 from cmu_112_graphics import *
 from graphClass import *
+# import pygame
+# from pygame.locals import *
+# from pygame import mixer
+# pygame.mixer.init()
+
+# def play():
+#     musicPath = '/Users/nanyu/Documents/GitHub/112TP/Xue Mao Jiao - Xiao Pan Pan & Xiao Feng Feng.mp3'
+#     pygame.mixer.music.load(musicPath)
+#     pygame.mixer.music.play(-1)
 
 def rgbString(r, g, b):
     return f'#{r:02x}{g:02x}{b:02x}'
@@ -106,6 +115,10 @@ def toggleOptions(app,x,y):
         app.mode = 'BFS'
         app.cache = None
         reset(app)
+    elif inAStarBounds(app,x,y):
+        app.mode = 'aStar'
+        app.cache = None
+        reset(app)
     elif inHC1Bounds(app,x,y):
         app.gMode = 'HC1'
         reset(app)
@@ -137,6 +150,10 @@ def inDijkBounds(app,x,y):
     startW,startH,endW,endH = getDijkModeBounds(app)
     return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
 
+def inAStarBounds(app,x,y):
+    startW,startH,endW,endH = getAStarModeBounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
 def inCustomBounds(app,x,y):
     startW,startH,endW,endH = getCustomBounds(app)
     return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
@@ -153,13 +170,19 @@ def getModeBounds(app):
 
 def getBFSModeBounds(app):
     startW,startH,endW,endH = getModeBounds(app)
-    midH = (startH + endH)/2
-    return startW,startH,endW,midH
+    midH1 = (startH + (endH-startH)/3)
+    return startW,startH,endW,midH1
 
 def getDijkModeBounds(app):
     startW,startH,endW,endH = getModeBounds(app)
-    midH = (startH + endH)/2
-    return startW,midH,endW,endH
+    midH1 = (startH + (endH-startH)/3)
+    midH2 = (startH + 2*(endH-startH)/3)
+    return startW,midH1,endW,midH2
+
+def getAStarModeBounds(app):
+    startW,startH,endW,endH = getModeBounds(app)
+    midH2 = (startH + 2*(endH-startH)/3)
+    return startW,midH2,endW,endH
 
 def getCustomBounds(app):
     startW,startH = app.screenMargin + app.gM + app.bW*8,app.screenMargin + app.gM
@@ -177,17 +200,21 @@ def drawCustom(app,canvas):
 
 def drawModes(app,canvas):
     startW,startH,endW,endH = getModeBounds(app)
-    midH = (startH + endH)/2
+    dH = (endH-startH)/3
     if app.mode == 'BFS':
-        c1,c2 = myGreen,'grey'
+        c1,c2,c3 = myGreen,'grey','grey'
     elif app.mode == 'dijk':
-        c1,c2 = 'grey',myGreen
+        c1,c2,c3 = 'grey',myGreen,'grey'
+    elif app.mode == 'aStar':
+        c1,c2,c3 = 'grey','grey',myGreen
     else:
-        c1,c2 = 'grey','grey'
-    canvas.create_rectangle(startW,startH,endW,midH,outline='black',fill=c1)
-    canvas.create_text((startW+endW)/2,(startH+midH)/2,text='BFS')
-    canvas.create_rectangle(startW,midH,endW,endH,outline='black',fill=c2)
-    canvas.create_text((startW+endW)/2,(midH+endH)/2,text="Dijkstra's")
+        c1,c2,c3 = 'grey','grey','grey'
+    canvas.create_rectangle(startW,startH,endW,startH+dH,outline='black',fill=c1)
+    canvas.create_text((startW+endW)/2,(startH+startH+dH)/2,text='BFS')
+    canvas.create_rectangle(startW,startH+dH,endW,startH+2*dH,outline='black',fill=c2)
+    canvas.create_text((startW+endW)/2,(2*startH+3*dH)/2,text="Dijkstra's")
+    canvas.create_rectangle(startW,startH+2*dH,endW,endH,outline='black',fill=c3)
+    canvas.create_text((startW+endW)/2,(startH+2*dH+endH)/2,text="A*")
 
 def getOptBounds(app):
     startW,startH = app.screenMargin + app.gM + 4*(app.bW),app.screenMargin + app.gM

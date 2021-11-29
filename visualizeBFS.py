@@ -2,33 +2,9 @@ from cmu_112_graphics import *
 from graphClass import *
 from BFS import *
 from visualizeHelper import *
-
-# A = Node(4,2,'A')
-# B = Node(3,4,'B')
-# C = Node(5,4,'C')
-# D = Node(7,4,'D')
-# E = Node(4,6,'E')
-# F = Node(6,6,'F')
-# G = Node(7,8,'G')
-# H = Node(3,7,'H')
-# # testGraph = {
-# #     A:{B:2,C:4,D:3},
-# #     B:{A:2},
-# #     C:{A:4,E:5,F:2},
-# #     D:{A:3,F:8},
-# #     E:{C:5,H:6},
-# #     F:{D:8,C:5,G:3},
-# #     G:{F:3},
-# #     H:{E:6}
-# # }
-# testGraph = {
-#     A:{B:2,C:4,D:3},
-#     B:{A:2},
-#     C:{A:4,E:5,F:2},
-#     D:{A:3,F:8},
-#     E:{C:5},
-#     F:{D:8,C:5}
-# }
+# import pygame
+# from pygame.locals import *
+# from pygame import mixer
 
 def BFS_mousePressed(app,event):
     if inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
@@ -74,6 +50,7 @@ def applyState(app):
         app.Q = Q
         for node in app.nodes:
             if node == current:
+                play()
                 node.color = myGreen
             elif node in seen:
                 node.color = 'grey'

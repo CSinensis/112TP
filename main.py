@@ -2,8 +2,10 @@ from cmu_112_graphics import *
 from graphClass import *
 from visualizeDijkstra import *
 from visualizeBFS import *
+from visualizeAStar import *
 from createCustom import *
 from splashscreen import *
+from help import *
 
 ##########################################
 # Main App
@@ -31,4 +33,19 @@ def appStarted(app):
     # reset(app)
     # resetCustom(app)
 
-runApp(width=800,height=600)
+def main():
+    runApp(width=800,height=600)
+
+if (__name__ == '__main__'):
+    main()
+
+
+'''
+Things to Fix:
+- Queue needs to not immediately pop the last term
+- Be able to exit custom mode w/out crashing with blank graph
+- Non-connected graphs
+- Make Queue clearer
+- Make weights based on manhattan distance + factor
+- fix dijk so that it ends on first instance of seen
+'''
