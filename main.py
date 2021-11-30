@@ -47,11 +47,11 @@ if (__name__ == '__main__'):
 
 '''
 Things to Fix:
-- Queue needs to not immediately pop the last term
+- Queue needs to not immediately pop the last term (DONE)
 - Be able to exit custom mode w/out crashing with blank graph
 - Non-connected graphs
-- Make Queue clearer
-- Make weights based on manhattan distance + factor
-- fix dijk so that it ends on first instance of seen
-- Add option to choose start and end node
+- Make Queue clearer (DONE)
+- Make weights based on manhattan distance + factor (DONE)
+- fix dijk so that it ends on first instance of seen (DONE)
+- Add option to choose start and end node (DONE)
 '''

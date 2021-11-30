@@ -1,4 +1,5 @@
 from graphClass import *
+from backendHelper import *
 import copy
 """
 References:
@@ -43,15 +44,20 @@ def backtrack(path,start,end):
 def BFS(graph,root,target):
     Q,path = [root],dict()
     graph.seen.add(root)
-    cache = [({root},dict(),root,copy.deepcopy(Q))]
-    return BFSHelper(graph,root,target,Q,path,cache)
+    cache = [({root},dict(),root,root,copy.deepcopy(Q))]
+    BFSHelper(graph,root,target,Q,path,cache)
+    cache = cleanBFSCache(copy.deepcopy(cache),target)
+    return backtrack(path,root,target),cache
 
 def BFSHelper(graph,root,target,Q,path,cache):
     node = Q.pop(0)
     if node == target:
-        while cache[-1][2] != target:
-            cache.pop()
-        return backtrack(path,root,target),cache
+        # while cache[-1][3] != target:
+        #     cache.pop()
+
+        # cache.append((copy.copy(graph.seen),copy.deepcopy(path),node,node,copy.deepcopy(Q)))
+        # return backtrack(path,root,target),cache
+        return
     else:
         for i in graph.getNeighbors(node):
             if i not in graph.seen:
@@ -59,7 +65,7 @@ def BFSHelper(graph,root,target,Q,path,cache):
                 graph.seen.add(i)
                 path[node] = path.get(node,set())
                 path[node].add(i)
-                cache.append((copy.copy(graph.seen),copy.deepcopy(path),i,copy.deepcopy(Q)))
+                cache.append((copy.copy(graph.seen),copy.deepcopy(path),node,i,copy.deepcopy(Q)))
         return BFSHelper(graph,root,target,Q,path,cache)
 
 # NON RECURSIVE IN CASE BECAUSE I HATE MYSELF

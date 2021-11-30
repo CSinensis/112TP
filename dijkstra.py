@@ -39,19 +39,21 @@ def dijkstra(G,root,target):
     Q.put((0,root))
     costs = setCosts(G,root)
     path = dict()
-    cache = [({root},copy.deepcopy(costs),root,root,[])]
+    cache = [({root},copy.deepcopy(costs),root,root,copy.deepcopy(sorted(Q.queue)))]
     dijkHelper(G,target,Q,costs,path,cache)
+    print(cache)
     cache = cleanCache(copy.deepcopy(cache),target)
+    print(cache)
     return backtrackDijkstra(costs,root,target),cache
         
 def dijkHelper(G,target,Q,costs,path,cache):
     if target in G.seen:
+        cache.append((copy.copy(G.seen),copy.deepcopy(costs),target,target,copy.deepcopy(sorted(Q.queue))))
         return
     else:
         (cost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):
-            cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
             if neighbor not in G.seen:
                 newCost = cost + G.getEdgeWeight(node,neighbor)
                 if newCost < costs[neighbor][0]:
@@ -61,6 +63,7 @@ def dijkHelper(G,target,Q,costs,path,cache):
                     costs[neighbor] = (newCost,node)
                 path[node] = path.get(node,set())
                 path[node].add(neighbor)
+                cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
         dijkHelper(G,target,Q,costs,path,cache)
 
 #NON RECURSIVE IMPLEMENTATION IN CASE:

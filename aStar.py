@@ -72,9 +72,6 @@ def setCosts(G,root):
 #     return (abs(testCoords[node][0] - testCoords[target][0])
 #     + abs(testCoords[node][1] - testCoords[target][1]))
 
-def h(node,target):
-    return (abs(node.x-target.x) + abs(node.y-target.y))
-
 def backtrack(costs,root,target):
     path = [target,f'Total Cost: {costs[target][2]}']
     node = target
@@ -88,19 +85,19 @@ def aStar(G,root,target):
     initialHCost = h(root,target)
     Q.put((initialHCost,initialHCost,0,root))
     costs = setCosts(G,root)
-    cache = [({root},copy.deepcopy(costs),root,root,[])]
+    cache = [({root},copy.deepcopy(costs),root,root,copy.deepcopy(sorted(Q.queue)))]
     aStarHelper(G,target,Q,costs,cache)
     cache = cleanCache(copy.deepcopy(cache),target)
     return backtrack(costs,root,target),cache
 
 def aStarHelper(G,target,Q,costs,cache):
     if target in G.seen:
+        cache.append((copy.copy(G.seen),copy.deepcopy(costs),target,target,copy.deepcopy(sorted(Q.queue))))
         return
     else:
         (TCost,HCost,GCost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):
-            cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
             if neighbor not in G.seen:
                 newGCost = GCost + G.getEdgeWeight(node,neighbor)
                 newHCost = h(neighbor,target)
@@ -110,6 +107,7 @@ def aStarHelper(G,target,Q,costs,cache):
                         Q.queue.remove((costs[neighbor][0],costs[neighbor][1],costs[neighbor][2],neighbor))
                     Q.put((newTCost,newHCost,newGCost,neighbor))
                     costs[neighbor] = (newTCost,newHCost,newGCost,node)
+                cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
         aStarHelper(G,target,Q,costs,cache)
 
 def main():

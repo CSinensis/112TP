@@ -3,20 +3,11 @@ from graphClass import *
 from dijkstra import *
 from visualizeHelper import *
 
-# testGraph = {
-#     A:{B:2,C:4,D:3},
-#     B:{A:2},
-#     C:{A:4,E:5,F:2},
-#     D:{A:3,F:8},
-#     E:{C:5},
-#     F:{D:8,C:5}
-# }
-
 def dijk_mousePressed(app,event):
-    if inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
+    if app.G.graph != dict() and inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
         app.step += 1
         applyState(app)
-    elif inBackBounds(app,event.x,event.y) and app.step > 0:
+    elif app.G.graph != dict() and inBackBounds(app,event.x,event.y) and app.step > 0:
         app.step -= 1
         applyState(app)
     elif inCustomBounds(app,event.x,event.y):
@@ -26,25 +17,6 @@ def dijk_mousePressed(app,event):
         reset(app)
     else:
         toggleOptions(app,event.x,event.y)
-
-    
-def dijk_keyPressed(app,event):
-    if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
-        app.step += 1
-        applyState(app)
-    elif event.key == 'Left' and app.step > 0:
-        app.step -= 1
-        applyState(app)
-    elif event.key == 't':
-        app.mode = 'BFS'
-        app.cache = None
-        reset(app)
-    elif event.key == 'r':
-        reset(app)
-    elif event.key == 'n':
-        print("HERE")
-        app.gMode = 'HC2'
-        reset(app)
 
 def dijk_timerFired(app):
     if app.auto and (app.cache == None or app.step < len(app.cache)):
@@ -60,8 +32,8 @@ def applyState(app):
         state = app.cache[app.step]
         print(state)
         seen,costs,current,check,Q = state
+        app.Q = Q[:6]
         edges = pathToEdges(app,costs,current)
-        app.Q = Q
         for node in app.nodes:
             if node == current:
                 node.color = myGreen
@@ -83,6 +55,7 @@ def pathToEdges(app,costs,current):
     while node != app.G.start:
         key = costs[node][1]
         edges.add((key,node))
+        edges.add((node,key))
         node = key
     return edges
 
@@ -102,9 +75,17 @@ def drawNodes(app,canvas):
         canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
         canvas.create_text(cx,cy,text=f'{node.label}')
 
+def drawQueueText(app,canvas):
+    QStartW,QStartH = gridToCoord(app,10,4)
+    QStartW += app.gM + app.screenMargin
+    for i in range(len(app.Q)):
+        canvas.create_text(QStartW,QStartH+i*app.bH,text=f'''Node: {app.Q[i][1]}
+    Weight: {app.Q[i][0]}''',anchor='nw')
+    if app.cache != None and len(app.Q) == 0 and app.step >= len(app.cache)-1:
+        canvas.create_text(QStartW,QStartH,text='Finished!',anchor='nw')
+
 def dijk_redrawAll(app,canvas):
     drawAll(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
-
-    #drawOtherGrid(app,canvas)
+    drawQueueText(app,canvas)
