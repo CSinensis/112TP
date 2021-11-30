@@ -37,6 +37,7 @@ def reset(app):
     app.edges = []
     app.step = 0
     app.cache = None
+    app.solution = None
     app.Q = []
     app.auto = False
     app.customMessage = ('''Click here to create

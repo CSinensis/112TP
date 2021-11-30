@@ -29,6 +29,7 @@ def appStarted(app):
     G1 = getHardcoded1()
     G2 = getHardcoded2()
     app.mode = 'ss'
+    app.timerDelay = 500
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
     app.gMode = 'HC1'
@@ -47,11 +48,15 @@ if (__name__ == '__main__'):
 
 '''
 Things to Fix:
-- Queue needs to not immediately pop the last term (DONE)
-- Be able to exit custom mode w/out crashing with blank graph
 - Non-connected graphs
-- Make Queue clearer (DONE)
-- Make weights based on manhattan distance + factor (DONE)
-- fix dijk so that it ends on first instance of seen (DONE)
-- Add option to choose start and end node (DONE)
+- Deleting items from gallery
+- help screens
+
+DONE:
+- Queue needs to not immediately pop the last term 
+- Be able to exit custom mode w/out crashing with blank graph 
+- Make Queue clearer 
+- Make weights based on manhattan distance + factor 
+- fix dijk so that it ends on first instance of seen 
+- Add option to choose start and end node 
 '''

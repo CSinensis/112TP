@@ -35,6 +35,7 @@ def backtrack(path,start,end):
     actualpath = [end]
     node = end
     while node != start:
+        print("FUCKKK")
         for key in path:
             if node in path[key]:
                 node = key
@@ -44,6 +45,8 @@ def backtrack(path,start,end):
 def BFS(graph,root,target):
     Q,path = [root],dict()
     graph.seen.add(root)
+    if not isConnected(copy.deepcopy(graph),root,target):
+        return False, []
     cache = [({root},dict(),root,root,copy.deepcopy(Q))]
     BFSHelper(graph,root,target,Q,path,cache)
     cache = cleanBFSCache(copy.deepcopy(cache),target)
@@ -52,11 +55,6 @@ def BFS(graph,root,target):
 def BFSHelper(graph,root,target,Q,path,cache):
     node = Q.pop(0)
     if node == target:
-        # while cache[-1][3] != target:
-        #     cache.pop()
-
-        # cache.append((copy.copy(graph.seen),copy.deepcopy(path),node,node,copy.deepcopy(Q)))
-        # return backtrack(path,root,target),cache
         return
     else:
         for i in graph.getNeighbors(node):

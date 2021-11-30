@@ -66,7 +66,7 @@ def BFS_keyPressed(app,event):
 def applyState(app):
     if app.cache == None:
         print(app.G,app.G.start,app.G.end)
-        blah,app.cache = BFS(app.G,app.G.start,app.G.end)
+        app.solution,app.cache = BFS(app.G,app.G.start,app.G.end)
     if app.step < len(app.cache):
         state = app.cache[app.step]
         print(state)
@@ -123,11 +123,14 @@ def drawNodes(app,canvas):
 
 def drawQueueText(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
-    QStartW += app.gM + app.screenMargin
-    for i in range(len(app.Q)):
-        canvas.create_text(QStartW,QStartH+i*app.bH,text=f'Node: {app.Q[i]}',anchor='nw')
-    if app.cache != None and len(app.Q) == 0 and len(app.cache) != 0:
+    QStartW += app.gM + 2*app.screenMargin
+    if app.solution == False:
+        canvas.create_text(QStartW,QStartH,text='No path found',anchor='nw')
+    elif app.cache != None and len(app.Q) == 0 and len(app.cache) != 0:
         canvas.create_text(QStartW,QStartH,text='Finished!',anchor='nw')
+    else:
+        for i in range(len(app.Q)):
+            canvas.create_text(QStartW,QStartH+i*app.bH,text=f'Node: {app.Q[i]}',anchor='nw')
 
 def BFS_redrawAll(app,canvas):
     drawAll(app,canvas)

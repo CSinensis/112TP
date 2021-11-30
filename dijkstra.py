@@ -39,18 +39,19 @@ def dijkstra(G,root,target):
     Q.put((0,root))
     costs = setCosts(G,root)
     path = dict()
+    if not isConnected(copy.deepcopy(G),root,target):
+        return False, []
     cache = [({root},copy.deepcopy(costs),root,root,copy.deepcopy(sorted(Q.queue)))]
-    dijkHelper(G,target,Q,costs,path,cache)
-    print(cache)
+    result = dijkHelper(G,target,Q,costs,path,cache)
     cache = cleanCache(copy.deepcopy(cache),target)
-    print(cache)
-    return backtrackDijkstra(costs,root,target),cache
-        
+    return backtrackDijkstra(costs,root,target),cache 
+
 def dijkHelper(G,target,Q,costs,path,cache):
     if target in G.seen:
         cache.append((copy.copy(G.seen),copy.deepcopy(costs),target,target,copy.deepcopy(sorted(Q.queue))))
         return
     else:
+        print("GOT HERE")
         (cost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):

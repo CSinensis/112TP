@@ -27,7 +27,8 @@ def dijk_timerFired(app):
 
 def applyState(app):
     if app.cache == None:
-        blah,app.cache = dijkstra(app.G,app.G.start,app.G.end)
+        app.solution,app.cache = dijkstra(app.G,app.G.start,app.G.end)
+        print(app.cache)
     if app.step < len(app.cache):
         state = app.cache[app.step]
         print(state)
@@ -77,12 +78,15 @@ def drawNodes(app,canvas):
 
 def drawQueueText(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
-    QStartW += app.gM + app.screenMargin
-    for i in range(len(app.Q)):
-        canvas.create_text(QStartW,QStartH+i*app.bH,text=f'''Node: {app.Q[i][1]}
-    Weight: {app.Q[i][0]}''',anchor='nw')
-    if app.cache != None and len(app.Q) == 0 and app.step >= len(app.cache)-1:
+    QStartW += app.gM + 2*app.screenMargin
+    if app.solution == False:
+        canvas.create_text(QStartW,QStartH,text='No path found',anchor='nw')
+    elif app.cache != None and len(app.Q) == 0 and app.step >= len(app.cache)-1:
         canvas.create_text(QStartW,QStartH,text='Finished!',anchor='nw')
+    else:
+        for i in range(len(app.Q)):
+            canvas.create_text(QStartW,QStartH+i*app.bH,text=f'''Node: {app.Q[i][1]}
+        Weight: {app.Q[i][0]}''',anchor='nw')
 
 def dijk_redrawAll(app,canvas):
     drawAll(app,canvas)

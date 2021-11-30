@@ -73,6 +73,7 @@ def setCosts(G,root):
 #     + abs(testCoords[node][1] - testCoords[target][1]))
 
 def backtrack(costs,root,target):
+    print(costs)
     path = [target,f'Total Cost: {costs[target][2]}']
     node = target
     while node != root:
@@ -85,6 +86,8 @@ def aStar(G,root,target):
     initialHCost = h(root,target)
     Q.put((initialHCost,initialHCost,0,root))
     costs = setCosts(G,root)
+    if not isConnected(copy.deepcopy(G),root,target):
+        return False, []
     cache = [({root},copy.deepcopy(costs),root,root,copy.deepcopy(sorted(Q.queue)))]
     aStarHelper(G,target,Q,costs,cache)
     cache = cleanCache(copy.deepcopy(cache),target)

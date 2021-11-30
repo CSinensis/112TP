@@ -28,7 +28,7 @@ def aStar_timerFired(app):
 def applyState(app):
     if app.cache == None:
         print(app.G,app.G.start,app.G.end)
-        blah,app.cache = aStar(app.G,app.G.start,app.G.end)
+        app.solution,app.cache = aStar(app.G,app.G.start,app.G.end)
     if app.step < len(app.cache):
         state = app.cache[app.step]
         print(state)
@@ -79,11 +79,14 @@ def drawNodes(app,canvas):
 def drawQueueText(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
     QStartW += app.gM + 2*app.screenMargin
-    for i in range(len(app.Q)):
-        canvas.create_text(QStartW,QStartH+i*app.bH,text=f'''Node: {app.Q[i][3]}\tH-Cost:{app.Q[i][1]}
-Total Cost: {app.Q[i][0]}''',anchor='nw')
-    if app.cache != None and len(app.Q) == 0 and app.step >= len(app.cache)-1:
+    if app.solution == False:
+        canvas.create_text(QStartW,QStartH,text='No path found',anchor='nw')
+    elif app.cache != None and len(app.Q) == 0 and app.step >= len(app.cache)-1:
         canvas.create_text(QStartW,QStartH,text='Finished!',anchor='nw')
+    else:
+        for i in range(len(app.Q)):
+            canvas.create_text(QStartW,QStartH+i*app.bH,text=f'''Node: {app.Q[i][3]}\tH-Cost:{app.Q[i][1]}
+    Total Cost: {app.Q[i][0]}''',anchor='nw')
 
 def aStar_redrawAll(app,canvas):
     drawAll(app,canvas)
