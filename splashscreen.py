@@ -60,8 +60,11 @@ def drawOptExtra(app,canvas):
 
 def ss_redrawAll(app,canvas):
     canvas.create_rectangle(0+app.screenMargin,0+app.screenMargin,
-    app.width-app.screenMargin,app.height-app.screenMargin,fill=myBlue)
-    canvas.create_rectangle(app.sMargin,app.height/2-150,app.width-app.sMargin,app.height/2+50,fill=myYellow)
+    app.width-app.screenMargin,app.height-app.screenMargin,fill=myBlue,width=0)
+    x1,y1,x2,y2 = app.sMargin,app.height/2-150,app.width-app.sMargin,app.height/2+50
+    # canvas.create_rectangle(app.sMargin,app.height/2-150,app.width-app.sMargin,app.height/2+50,fill=myYellow,width=0)
+    # canvas.create_polygon(x1,y1,x1,y2,x2,y1,x2,y2,fill=myYellow,width=0,smooth=True)
+    canvas.create_polygon(x1,y1,x2,y1,x2,y2,x1,y2,fill=myYellow,width=0,smooth=True)
     canvas.create_text(app.width/2,app.height/2,text=('''Welcome to 
 Pathfinding Visualizer'''), font="Arial 50 bold",anchor = 's',justify='center')
     drawOptCustom(app,canvas)

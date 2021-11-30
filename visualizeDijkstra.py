@@ -43,7 +43,7 @@ def applyState(app):
             elif node == check and current != app.G.end:
                 node.color = myBlue
             else:
-                node.color = 'red'
+                node.color = 'red3'
         for edge in app.edges:
             if edge.path in edges:
                 edge.color = myGreen

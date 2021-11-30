@@ -59,9 +59,13 @@ def toggleCustom(app,x,y):
     elif inBackBounds(app,x,y):
         app.setEnd = True
     elif inAutoBounds(app,x,y) and app.customGraph.graph != dict():
-        if app.customGraph.end == None:
-            app.customGraph.end = app.nodes[-1]
-        app.savedGraphs.append(copy.deepcopy(app.customGraph))
+        if len(app.savedGraphs) < 6:
+            if app.customGraph.end == None:
+                app.customGraph.end = app.nodes[-1]
+            app.savedGraphs.append(copy.deepcopy(app.customGraph))
+            app.customQText = 'Graph saved to gallery'
+        else:
+            app.customQText = 'Already have 6 graphs'
 
 def create_keyPressed(app,event):
     if event.key == 's':
@@ -116,6 +120,10 @@ def drawCustomButtons(app,canvas):
     drawSetEnd(app,canvas)
     drawSave(app,canvas)
 
+def drawCustomQText(app,canvas):
+    QStartW,QStartH = gridToCoord(app,10,4)
+    QStartW += app.gM + 2*app.screenMargin
+    canvas.create_text(QStartW,QStartH,text=app.customQText,anchor='nw')
 
 def create_redrawAll(app,canvas):
     drawAll(app,canvas)
@@ -123,3 +131,4 @@ def create_redrawAll(app,canvas):
     drawNodes(app,canvas)
     drawCustomGraphParams(app,canvas)
     drawCustomButtons(app,canvas)
+    drawCustomQText(app,canvas)

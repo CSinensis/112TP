@@ -104,7 +104,7 @@ def drawCustom(app,canvas):
     if app.mode == 'create':
         c = myGreen
     else:
-        c = 'grey'
+        c = 'grey70'
     canvas.create_rectangle(startW,startH,endW,endH,fill=c)
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text=app.customMessage)
 
@@ -112,13 +112,13 @@ def drawModes(app,canvas):
     startW,startH,endW,endH = getModeBounds(app)
     dH = (endH-startH)/3
     if app.mode == 'BFS':
-        c1,c2,c3 = myGreen,'grey','grey'
+        c1,c2,c3 = myGreen,'grey70','grey70'
     elif app.mode == 'dijk':
-        c1,c2,c3 = 'grey',myGreen,'grey'
+        c1,c2,c3 = 'grey70',myGreen,'grey70'
     elif app.mode == 'aStar':
-        c1,c2,c3 = 'grey','grey',myGreen
+        c1,c2,c3 = 'grey70','grey70',myGreen
     else:
-        c1,c2,c3 = 'grey','grey','grey'
+        c1,c2,c3 = 'grey70','grey70','grey70'
     canvas.create_rectangle(startW,startH,endW,startH+dH,outline='black',fill=c1)
     canvas.create_text((startW+endW)/2,(startH+startH+dH)/2,text='BFS')
     canvas.create_rectangle(startW,startH+dH,endW,startH+2*dH,outline='black',fill=c2)
@@ -153,11 +153,11 @@ def drawGraphOptions(app,canvas):
     startW,startH,endW,midH = startW,startH,endW,endH = getOptBounds(app)
     midH = (startH + endH)/2
     if app.gMode == 'HC1':
-        c1,c2 = myGreen,'grey'
+        c1,c2 = myGreen,'grey70'
     elif app.gMode == 'HC2':
-        c1,c2 = 'grey',myGreen
+        c1,c2 = 'grey70',myGreen
     else:
-        c1,c2 = 'grey','grey'
+        c1,c2 = 'grey70','grey70'
     canvas.create_rectangle(startW,startH,endW,midH,outline='black',fill=c1)
     canvas.create_text((startW+endW)/2,(startH+midH)/2,text='Sample Graph 1')
     canvas.create_rectangle(startW,midH,endW,endH,outline='black',fill=c2)
@@ -167,7 +167,7 @@ def drawQueueBox(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
     QStartW += app.gM + app.screenMargin
     QEndH,QEndW = app.height-app.screenMargin-app.gM,app.width-app.screenMargin - app.gM
-    canvas.create_rectangle(QStartW,QStartH,QEndW,QEndH,outline = 'grey')
+    canvas.create_rectangle(QStartW,QStartH,QEndW,QEndH,outline = 'grey70')
     canvas.create_text((QStartW+QEndW)/2,QStartH,text='Queue',anchor='s')
 
 def getForBounds(app):
@@ -238,7 +238,7 @@ def getHomeBounds(app):
 
 def drawHome(app,canvas):
     startW,startH,endW,endH = getHomeBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH)
+    canvas.create_rectangle(startW,startH,endW,endH,fill='white')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Home')     
 
 def drawGrid(app,canvas):
@@ -253,7 +253,7 @@ def drawGrid(app,canvas):
                 margin+gridStartWidth+width*col,
                 margin+gridStartHeight+height*row,
                 margin+gridStartWidth+width*(col+1),
-                margin+gridStartHeight+height*(row+1),outline='grey')
+                margin+gridStartHeight+height*(row+1),outline='grey70')
 
 def drawGraphParams(app,canvas):
     startH = 1/4*(app.height-2*app.screenMargin) - app.screenMargin

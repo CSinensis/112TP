@@ -17,31 +17,43 @@ def getGraphParams(graph):
 def gal_mousePressed(app,event):
     index = inBounds(app,event.x,event.y)
     if index != None:
-        app.mode = 'BFS'
-        app.gMode = 'custom'
-        app.customGraph = app.savedGraphs[index]
-        print(app.customGraph)
-        reset(app)
+        if inDeleteBounds(app,event.x,event.y,index):
+            app.savedGraphs.pop(index)
+        elif inEditBounds(app,event.x,event.y,index):
+            app.mode = 'create'
+            resetCustom(app)
+            app.customGraph = app.savedGraphs[index]
+            setParams(app)
+        else:
+            app.mode = 'BFS'
+            app.gMode = 'custom'
+            app.customGraph = app.savedGraphs[index]
+            reset(app)
+    elif inHomeBounds(app,event.x,event.y):
+        app.mode = 'ss'
+        splashStarted(app)
 
-
-def gal_timerFired(app):
-    return
+def setParams(app):
+    app.nodes = list(app.customGraph.graph)
+    seen = set()
+    for node in app.customGraph.graph:
+        app.grid[node.x][node.y] = node
+        for neighbor in app.customGraph.graph[node]:
+            if neighbor not in seen:
+                newEdge = Edge(node,neighbor)
+                newEdge.weight = app.customGraph.graph[node][neighbor]
+                app.edges.append(newEdge)
+        seen.add(node)
+    print(app.grid)
 
 def drawBackground(app,canvas):
     canvas.create_rectangle(app.screenMargin,app.screenMargin,
-    app.width-app.screenMargin,app.height-app.screenMargin,fill=myBlue)
+    app.width-app.screenMargin,app.height-app.screenMargin,fill=myBlue,width=0)
     canvas.create_rectangle(app.screenMargin,app.screenMargin,
-    app.width-app.screenMargin,app.screenMargin + app.bannerH,fill=myGreen)
+    app.width-app.screenMargin,app.screenMargin + app.bannerH,fill=myGreen,width=0)
     canvas.create_text(app.width/2,app.screenH/8 + app.screenMargin,text=('''Pathfinding Visualizer
     Saved Graphs'''), font="Arial 50 bold",justify='center')
 
-# def test(app,canvas):
-#     canvas.create_rectangle(app.screenMargin,app.bannerH+app.screenMargin,app.screenMargin+app.screenW,app.bannerH+app.screenMargin+app.screenH,outline='pink')
-#     for i in range(3):
-#         for j in range(2):
-#             cx,cy = app.screenW/3*(i) + app.screenW/6 + app.screenMargin,app.screenH/2*(j) + app.screenH/4 + app.bannerH + app.screenMargin
-#             canvas.create_line(cx,0,cx,app.height,fill='pink')
-#             canvas.create_line(0,cy,app.width,cy,fill='pink')
 def inBounds(app,x,y):
     for index in range(len(app.savedGraphs)):
         startW,startH,endW,endH = app.bounds[index]
@@ -49,12 +61,36 @@ def inBounds(app,x,y):
             return index
     return None
 
+def inDeleteBounds(app,x,y,index):
+    i = index//3
+    j = index%3
+    cx = app.screenMargin + app.galW + app.galM + (j)*(2*app.galW+app.galM)
+    cy = app.screenMargin + app.galH + app.galM + (i)*(2*app.galH+app.galM) + app.bannerH
+    startW,startH,endW,endH = cx,cy+app.galH-2*app.menuH,cx+app.galW,cy+app.galH
+    if ((startW <= x <= endW) and (startH <= y <= endH)):
+        return True
+    return False
+
+def inEditBounds(app,x,y,index):
+    i = index//3
+    j = index%3
+    cx = app.screenMargin + app.galW + app.galM + (j)*(2*app.galW+app.galM)
+    cy = app.screenMargin + app.galH + app.galM + (i)*(2*app.galH+app.galM) + app.bannerH
+    startW,startH,endW,endH = cx-app.galW,cy+app.galH-2*app.menuH,cx,cy+app.galH
+    if ((startW <= x <= endW) and (startH <= y <= endH)):
+        return True
+    return False
 
 def drawGal(app,canvas):
     for i in range(2):
         for j in range(3):
-            cx,cy = app.screenMargin + app.galM + app.galW + (j)*(2*app.galW+app.galM),app.screenMargin + app.galM + app.galH + (i)*(2*app.galH+app.galM) + app.bannerH
+            cx = app.screenMargin + app.galW + app.galM + (j)*(2*app.galW+app.galM)
+            cy = app.screenMargin + app.galH + app.galM + (i)*(2*app.galH+app.galM) + app.bannerH
             canvas.create_rectangle(cx-app.galW,cy-app.galH,cx+app.galW,cy+app.galH,fill='white')
+            canvas.create_rectangle(cx-app.galW,cy+app.galH-2*app.menuH,cx,cy+app.galH,fill=myYellow)
+            canvas.create_text((2*cx-app.galW)/2,cy+app.galH-app.menuH,text='Edit',font = 'Arial 20')
+            canvas.create_rectangle(cx,cy+app.galH-2*app.menuH,cx+app.galW,cy+app.galH,fill='red3')
+            canvas.create_text((2*cx+app.galW)/2,cy+app.galH-app.menuH,text='Delete',font = 'Arial 20')
 
 def drawGraphs(app,canvas):
     for i in range (len(app.savedGraphs)):
@@ -79,13 +115,10 @@ def drawNodes(app,canvas,index,nodes):
         cx,cy = gridToCoord(app,node.x,node.y,index)
         r = node.r/2
         canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
-        canvas.create_text(cx,cy,text=f'{node.label}',font='Arial 10')
+        canvas.create_text(cx,cy,text=f'{node.label}',font='Arial 9')
 
 def gal_redrawAll(app,canvas):
     drawBackground(app,canvas)
     drawGal(app,canvas)
     drawGraphs(app,canvas)
-    # test(app,canvas)
-
-    return
-
+    drawHome(app,canvas)

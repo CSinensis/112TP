@@ -19,6 +19,7 @@ def resetCustom(app):
     app.setStart = False
     app.setEnd = False
     app.Q = []
+    app.customQText = ''
     app.customMessage = '''Click here to exit 
     editing mode'''
 
@@ -46,6 +47,7 @@ def reset(app):
 
 def galStarted(app):
     app.galM = 2*app.screenMargin
+    app.menuH = 20
     app.bannerH = (app.height - 2*app.screenMargin)/5 
     app.screenW = app.width - 2*app.screenMargin
     app.screenH = (app.height - 2*app.screenMargin) - app.bannerH
@@ -53,7 +55,7 @@ def galStarted(app):
     app.galH = (app.screenH - 3*app.galM)/4
     app.bounds = getGalBounds(app)
     app.miniW = app.galW/5
-    app.miniH = (app.galH - 20)/5
+    app.miniH = (app.galH - app.menuH)/5
     return
 
 def splashStarted(app):

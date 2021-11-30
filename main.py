@@ -48,11 +48,11 @@ if (__name__ == '__main__'):
 
 '''
 Things to Fix:
-- Non-connected graphs
 - Deleting items from gallery
 - help screens
 
 DONE:
+- Non-connected graphs 
 - Queue needs to not immediately pop the last term 
 - Be able to exit custom mode w/out crashing with blank graph 
 - Make Queue clearer 

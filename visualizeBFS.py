@@ -76,12 +76,12 @@ def applyState(app):
         for node in app.nodes:
             if node == current:
                 node.color = myGreen
-            elif node in seen:
-                node.color = 'grey'
             elif node == check and current != app.G.end:
                 node.color = myBlue
+            elif node in seen:
+                node.color = 'grey'
             else:
-                node.color = 'red'
+                node.color = 'red3'
         for edge in app.edges:
             if edge.path in edges:
                 edge.color = myGreen
