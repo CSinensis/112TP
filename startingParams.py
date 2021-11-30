@@ -19,6 +19,7 @@ def resetCustom(app):
     app.setStart = False
     app.setEnd = False
     app.Q = []
+    app.url = None
     app.customQText = ''
     app.customMessage = '''Click here to exit 
     editing mode'''

@@ -5,6 +5,7 @@ from visualizeBFS import *
 from visualizeAStar import *
 from createCustom import *
 from splashscreen import *
+from createCustomImg import *
 from help import *
 from gallery import *
 
@@ -28,16 +29,17 @@ def getScreenParams(app):
 def appStarted(app):
     G1 = getHardcoded1()
     G2 = getHardcoded2()
-    app.mode = 'ss'
+    app.mode = 'img'
     app.timerDelay = 500
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
+    print(app.bH,app.bW)
     app.gMode = 'HC1'
     app.savedGraphs = [G1,G2]
-    splashStarted(app)
+    # splashStarted(app)
     # galStarted(app)
     # reset(app)
-    # resetCustom(app)
+    resetCustom(app)
 
 def main():
     runApp(width=800,height=600)

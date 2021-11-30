@@ -32,6 +32,8 @@ class Graph(object):
         self.seen = set()
         self.start = None
         self.end = None
+        self.img = None
+        self.gridMode = True
     
     def __repr__(self):
         return f'{self.graph}'

@@ -268,7 +268,7 @@ def drawAll(app,canvas):
     drawCustom(app,canvas)
     drawReset(app,canvas)
     drawHome(app,canvas)
-    if app.mode != 'create':
+    if app.mode != 'create' and app.mode != 'img':
         drawGraphParams(app,canvas)
         drawButtons(app,canvas)
 
