@@ -1,18 +1,6 @@
 from cmu_112_graphics import *
 from visualizeHelper import *
 
-def galStarted(app):
-    app.galM = 2*app.screenMargin
-    app.bannerH = (app.height - 2*app.screenMargin)/5 
-    app.screenW = app.width - 2*app.screenMargin
-    app.screenH = (app.height - 2*app.screenMargin) - app.bannerH
-    app.galW = (app.screenW - 4*app.galM)/6
-    app.galH = (app.screenH - 3*app.galM)/4
-    app.bounds = getGalBounds(app)
-    app.miniW = app.galW/5
-    app.miniH = (app.galH - 20)/5
-    return
-
 def getGraphParams(graph):
     nodes = list(graph)
     edges = []
@@ -30,7 +18,9 @@ def gal_mousePressed(app,event):
     index = inBounds(app,event.x,event.y)
     if index != None:
         app.mode = 'BFS'
-        app.graph = app.savedGraphs[index]
+        app.gMode = 'custom'
+        app.customGraph = app.savedGraphs[index]
+        print(app.customGraph)
         reset(app)
 
 
@@ -59,15 +49,6 @@ def inBounds(app,x,y):
             return index
     return None
 
-def getGalBounds(app):
-    bounds = dict()
-    index = 0
-    for i in range(2):
-        for j in range(3):
-            cx,cy = app.screenMargin + app.galM + app.galW + (j)*(2*app.galW+app.galM),app.screenMargin + app.galM + app.galH + (i)*(2*app.galH+app.galM) + app.bannerH
-            bounds[index] = (cx-app.galW,cy-app.galH,cx+app.galW,cy+app.galH)
-            index += 1
-    return bounds
 
 def drawGal(app,canvas):
     for i in range(2):

@@ -51,7 +51,6 @@ def BFSHelper(graph,root,target,Q,path,cache):
     if node == target:
         while cache[-1][2] != target:
             cache.pop()
-        print(cache)
         return backtrack(path,root,target),cache
     else:
         for i in graph.getNeighbors(node):

@@ -42,7 +42,9 @@ def BFS_keyPressed(app,event):
 
 def applyState(app):
     if app.cache == None:
-        blah,app.cache = BFS(app.G,app.startNode,app.endNode)
+        print(app.G.start,app.G.end)
+        blah,app.cache = BFS(app.G,app.G.start,app.G.end)
+        print(app.cache)
     if app.step < len(app.cache):
         state = app.cache[app.step]
         seen,path,current,Q = state
@@ -50,7 +52,6 @@ def applyState(app):
         app.Q = Q
         for node in app.nodes:
             if node == current:
-                play()
                 node.color = myGreen
             elif node in seen:
                 node.color = 'grey'
@@ -72,7 +73,7 @@ def BFS_timerFired(app):
 def pathToEdges(app,path,current):
     edges = set()
     node = current
-    while node != app.startNode:
+    while node != app.G.start:
         for key in path:
             if node in path[key]:
                 edges.add((key,node))

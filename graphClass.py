@@ -28,9 +28,10 @@ largerTestGraph = {
 # https://docs.google.com/presentation/d/1Jcu_qIQDZLIhK71DdDagxv9ayCZgaHVqV5AmNhvXUGU/edit#slide=id.gccceb730df_0_334
 class Graph(object):
     def __init__(self,graph):
-        # self.graph = dict()
         self.graph = graph
         self.seen = set()
+        self.start = None
+        self.end = None
     
     def __repr__(self):
         return f'{self.graph}'

@@ -1,5 +1,6 @@
 from graphClass import *
 from queue import PriorityQueue
+from backendHelper import *
 import copy
 """
 References:
@@ -89,6 +90,7 @@ def aStar(G,root,target):
     costs = setCosts(G,root)
     cache = [({root},copy.deepcopy(costs),root,root,[])]
     aStarHelper(G,target,Q,costs,cache)
+    cache = cleanCache(copy.deepcopy(cache),target)
     return backtrack(costs,root,target),cache
 
 def aStarHelper(G,target,Q,costs,cache):

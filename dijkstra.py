@@ -1,5 +1,6 @@
 from graphClass import *
 from queue import PriorityQueue
+from backendHelper import *
 import copy
 """
 References:
@@ -40,8 +41,9 @@ def dijkstra(G,root,target):
     path = dict()
     cache = [({root},copy.deepcopy(costs),root,root,[])]
     dijkHelper(G,target,Q,costs,path,cache)
+    cache = cleanCache(copy.deepcopy(cache),target)
     return backtrackDijkstra(costs,root,target),cache
-
+        
 def dijkHelper(G,target,Q,costs,path,cache):
     if target in G.seen:
         return

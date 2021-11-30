@@ -20,6 +20,7 @@ def create_mousePressed(app,event):
         else:
             newNode = Node(col,row,f'{len(app.nodes)}')
             app.nodes.append(newNode)
+            app.customGraph.start,app.customGraph.end = app.nodes[0],app.nodes[-1]
             app.grid[col][row] = newNode
             if app.edgeMode != True:
                 app.edgeMode = True
@@ -31,13 +32,15 @@ def create_mousePressed(app,event):
                 app.customGraph.addEdge(newNode,app.prevNode,random.randrange(1,10))
     elif inCustomBounds(app,event.x,event.y):
         app.mode = 'BFS'
-        app.startNode,app.endNode = app.nodes[0],app.nodes[-1]
         app.gMode = 'custom'
         reset(app)
 
 def create_keyPressed(app,event):
     if event.key == 's':
         app.savedGraphs.append(copy.deepcopy(app.customGraph))
+    elif event.key == 'g':
+        app.mode = 'gal'
+        galStarted(app)
     
 
 def drawEdges(app,canvas):

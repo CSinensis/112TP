@@ -34,11 +34,14 @@ def resetCustom(app):
 
 def reset(app):
     if app.gMode == 'HC1':
-        app.G,app.startNode,app.endNode = getHardcoded1()
+        app.G = getHardcoded1()
+        print("YE",app.G.start,app.G.end)
     elif app.gMode == 'HC2':
-        app.G,app.startNode,app.endNode = getHardcoded2()
+        app.G = getHardcoded2()
     elif app.gMode == 'custom':
-        app.G,app.startNode,app.endNode = getCustom(app)
+        app.G = copy.deepcopy(app.customGraph)
+        print(app.G.graph)
+        print("YE",app.G.start,app.G.end)
     app.grid = [[None]*app.gC for row in range(app.gR)]
     # app.edgeMode = False
     # app.prevNode = None
@@ -52,8 +55,27 @@ def reset(app):
     a custom graph''')
     setGraph(app)
 
-def getCustom(app):
-    return copy.deepcopy(app.customGraph),app.startNode,app.endNode
+def galStarted(app):
+    app.galM = 2*app.screenMargin
+    app.bannerH = (app.height - 2*app.screenMargin)/5 
+    app.screenW = app.width - 2*app.screenMargin
+    app.screenH = (app.height - 2*app.screenMargin) - app.bannerH
+    app.galW = (app.screenW - 4*app.galM)/6
+    app.galH = (app.screenH - 3*app.galM)/4
+    app.bounds = getGalBounds(app)
+    app.miniW = app.galW/5
+    app.miniH = (app.galH - 20)/5
+    return
+
+def getGalBounds(app):
+    bounds = dict()
+    index = 0
+    for i in range(2):
+        for j in range(3):
+            cx,cy = app.screenMargin + app.galM + app.galW + (j)*(2*app.galW+app.galM),app.screenMargin + app.galM + app.galH + (i)*(2*app.galH+app.galM) + app.bannerH
+            bounds[index] = (cx-app.galW,cy-app.galH,cx+app.galW,cy+app.galH)
+            index += 1
+    return bounds
 
 def getHardcoded1():
     A = Node(4,2,'A')
@@ -74,7 +96,11 @@ def getHardcoded1():
         G:{F:3},
         H:{E:6,B:10}
     }
-    return Graph(testGraph),A,H
+    G = Graph(testGraph)
+    G.start = A
+    G.end = H
+    print("NE",G.start,G.end)
+    return G
 
 def getHardcoded2():
     A = Node(4,2,'A')
@@ -91,7 +117,28 @@ def getHardcoded2():
         E:{C:5},
         F:{D:8,C:5}
     }
-    return Graph(testGraph),A,F
+    G = Graph(testGraph)
+    G.start = A
+    G.end = F
+    return G
+
+def getHardcoded3():
+    largerTestGraph = {
+    'X':{'E':4,'A':7,'B':2,'C':3},
+    'A':{'X':7,'B':3,'D':4},
+    'B':{'X':2,'A':3,'D':4,'H':5},
+    'C':{'X':3,'L':2},
+    'D':{'A':4,'B':4,'F':1},
+    'E':{'X':4},
+    'F':{'D':1,'H':3},
+    'G':{'H':2,'Y':2},
+    'H':{'G':2,'B':5,'F':3},
+    'I':{'L':4,'J':6,'K':4},
+    'J':{'L':1,'I':6},
+    'K':{'I':4,'Y':5},
+    'L':{'C':2,'I':4,'J':1},
+    'Y':{'G':2,'K':5},
+}
 
 def setGraph(app):
     app.nodes = list(app.G.graph)

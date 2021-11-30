@@ -26,15 +26,15 @@ def getScreenParams(app):
     return (screenMargin,gridWidth,gridHeight)
 
 def appStarted(app):
-    G1,f,g = getHardcoded1()
-    G2,r,w = getHardcoded2()
-    app.mode = 'gal'
+    G1 = getHardcoded1()
+    G2 = getHardcoded2()
+    app.mode = 'ss'
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
     app.gMode = 'HC1'
     app.savedGraphs = [G1,G2]
-    #splashStarted(app)
-    galStarted(app)
+    splashStarted(app)
+    # galStarted(app)
     # reset(app)
     # resetCustom(app)
 

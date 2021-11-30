@@ -46,8 +46,8 @@ def aStar_timerFired(app):
 
 def applyState(app):
     if app.cache == None:
-        print(app.G,app.startNode,app.endNode)
-        blah,app.cache = aStar(app.G,app.startNode,app.endNode)
+        print(app.G,app.G.start,app.G.end)
+        blah,app.cache = aStar(app.G,app.G.start,app.G.end)
     if app.step < len(app.cache):
         state = app.cache[app.step]
         print(state)
@@ -59,7 +59,7 @@ def applyState(app):
                 node.color = myGreen
             elif node in seen:
                 node.color = 'grey'
-            elif node == check:
+            elif node == check and current != app.G.end:
                 node.color = myBlue
             else:
                 node.color = 'red'
@@ -72,7 +72,7 @@ def applyState(app):
 def pathToEdges(app,costs,current):
     edges = set()
     node = current
-    while node != app.startNode:
+    while node != app.G.start:
         key = costs[node][3]
         edges.add((key,node))
         node = key
