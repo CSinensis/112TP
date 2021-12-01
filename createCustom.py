@@ -3,6 +3,7 @@ from graphClass import *
 from visualizeHelper import *
 from backendHelper import *
 import random
+# FILE FUNCTION: Allows user to create custom graph
 
 def create_mousePressed(app,event):
     if inBounds(app,event.x,event.y):
@@ -26,9 +27,6 @@ def create_mousePressed(app,event):
         reset(app)
     elif inResetBounds(app,event.x,event.y):
         resetCustom(app)
-    elif inHomeBounds(app,event.x,event.y):
-        app.mode = 'ss'
-        splashStarted(app)
     elif inOptBounds(app,event.x,event.y):
         app.mode = 'img'
         resetCustom(app)
@@ -73,6 +71,9 @@ def toggleCustom(app,x,y):
         app.setStart = True
     elif inBackBounds(app,x,y):
         app.setEnd = True
+    elif inHomeBounds(app,x,y):
+        app.mode = 'ss'
+        splashStarted(app)
     elif inAutoBounds(app,x,y) and app.customGraph.graph != dict():
         if len(app.savedGraphs) < 6:
             if app.customGraph.end == None:
@@ -86,7 +87,7 @@ def create_keyPressed(app,event):
     if event.key == 'u':
         app.mode = 'img'
         resetCustom(app)
-        app.customGraph.url = app.getUserInput('Enter URL for image:')
+        app.customGraph.url = 'https://www.cmu.edu/me/tpes/images/map.jpg'
         if app.customGraph.url == None:
             app.mode = 'create'
             resetCustom(app)

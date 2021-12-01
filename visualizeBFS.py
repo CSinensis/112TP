@@ -2,9 +2,7 @@ from cmu_112_graphics import *
 from graphClass import *
 from BFS import *
 from visualizeHelper import *
-# import pygame
-# from pygame.locals import *
-# from pygame import mixer
+# FILE FUNCTION: BFS Visualization
 
 def BFS_mousePressed(app,event):
     if inCustomBounds(app,event.x,event.y):
@@ -22,54 +20,20 @@ def BFS_mousePressed(app,event):
         toggleOptions(app,event.x,event.y)
 
 def BFS_keyPressed(app,event):
-    if event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
+    if app.G.graph != dict() and event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
         app.step += 1
         applyState(app)
-    elif event.key == 'Left' and app.step > 0:
+    elif app.G.graph != dict() and event.key == 'Left' and app.step > 0:
         app.step -= 1
         applyState(app)
-    elif event.key == 't':
-        app.mode = 'dijk'
-        app.cache = None
-        reset(app)
-        print(app.cache)
     elif event.key == 'r':
         reset(app)
-    elif event.key == 'n':
-        print("HERE")
-        app.gMode = 'HC2'
-        reset(app)
-
-# def applyState(app):
-#     if app.cache == None:
-#         print(app.G.start,app.G.end)
-#         blah,app.cache = BFS(app.G,app.G.start,app.G.end)
-#         print(app.cache)
-#     if app.step < len(app.cache):
-#         state = app.cache[app.step]
-#         seen,path,current,Q = state
-#         edges = pathToEdges(app,path,current)
-#         app.Q = Q[:6]
-#         for node in app.nodes:
-#             if node == current:
-#                 node.color = myGreen
-#             elif node in seen:
-#                 node.color = 'grey'
-#             else:
-#                 node.color = 'red'
-#         for edge in app.edges:
-#             if edge.path in edges:
-#                 edge.color = myGreen
-#             else:
-#                 edge.color = 'black'
 
 def applyState(app):
     if app.cache == None:
-        print(app.G,app.G.start,app.G.end)
         app.solution,app.cache = BFS(app.G,app.G.start,app.G.end)
     if app.step < len(app.cache):
         state = app.cache[app.step]
-        print(state)
         seen,path,current,check,Q = state
         edges = pathToEdges(app,path,current)
         app.Q = Q[:6]
@@ -122,4 +86,3 @@ def BFS_redrawAll(app,canvas):
     drawEdges(app,canvas)
     drawNodes(app,canvas)
     drawQueueText(app,canvas)
-

@@ -1,4 +1,5 @@
 from graphClass import *
+# FILE FUNCTION: Contains helper functions used in multiple algorithms
 
 def isConnected(G,root,target):
     Q = [root]

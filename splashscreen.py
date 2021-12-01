@@ -1,6 +1,7 @@
 from cmu_112_graphics import *
 from visualizeHelper import *
-    
+# FILE FUNCTION: Draws splashscreen, links to rest project
+
 def ss_mousePressed(app,event):
     if inOptCustom(app,event.x,event.y):
         app.mode = 'create'
@@ -15,7 +16,6 @@ def ss_mousePressed(app,event):
     elif inMazeBounds(app,event.x,event.y):
         app.mode = 'prim'
         primStarted(app)
-
 
 def inOptCustom(app,x,y):
     w1,h1,w2,h2 = getOptCustomBounds(app)
@@ -86,5 +86,3 @@ Pathfinding Visualizer'''), font="Arial 50 bold",anchor = 's',justify='center')
     drawOptVis(app,canvas)
     drawOptExtra(app,canvas)
     drawMazeBounds(app,canvas)
-
-

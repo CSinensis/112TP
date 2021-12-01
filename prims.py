@@ -2,12 +2,17 @@ from cmu_112_graphics import *
 from visualizeHelper import *
 from graphClass import *
 import random
+# FILE FUNCTION: Runs and visualizes maze generation using prim's algorithm
 """
 References:
 Wikipedia:
 https://en.wikipedia.org/wiki/Prim%27s_algorithm
-StackExchange:
+StackExchange (mainly the first responder's):
 https://stackoverflow.com/questions/29739751/implementing-a-randomly-generated-maze-using-prims-algorithm
+Prim's Algorithm in 2 minutes:
+https://www.youtube.com/watch?v=cplfcGZmX7I
+Maze Generation with Prim's Algorithm (mostly for visualization inspiration):
+https://www.youtube.com/watch?v=Kyoep91w7NE
 """
 def prim_mousePressed(app,event):
     if inHomeBounds(app,event.x,event.y):
@@ -23,12 +28,16 @@ def toggleMaze(app,x,y):
     elif inBackBounds(app,x,y) and app.index > 0:
         app.index -= 1
         applyState(app)
-    elif inAutoBounds(app,x,y) and app.index < len(app.states):
+    elif inAutoBounds(app,x,y):
         app.mazeAuto = not app.mazeAuto
 
 def prim_keyPressed(app,event):
-    if event.key == 't':
-        app.auto = not app.auto
+    if event.key == 'Right' and (app.states == None or app.index < len(app.states)):
+        app.index += 1
+        applyState(app)
+    elif event.key == 'Left' and app.index > 0:
+        app.index -= 1
+        applyState(app)
 
 def prim_timerFired(app):
     if app.mazeAuto:
@@ -38,7 +47,8 @@ def prim_timerFired(app):
 def applyState(app):
     if app.states == None:
         app.states = prim(app)
-    app.curState = app.states[app.index]
+    if app.index < len(app.states):
+        app.curState = app.states[app.index]
 
 def drawState(app,canvas):
     for row in range(app.rows):
@@ -136,6 +146,7 @@ def drawKey(app,canvas):
     canvas.create_text(StartW+app.screenMargin,StartH+2*app.s,text='Black - Maze wall',anchor='nw')
     canvas.create_text(StartW+app.screenMargin,StartH+5*app.s,text='White - Maze passage',anchor='nw')
     canvas.create_text(StartW+app.screenMargin,StartH+8*app.s,text='Green - Passage frontier',anchor='nw')
+
 def prim_redrawAll(app,canvas):
     drawBackground(app,canvas)
     if app.curState != None:
@@ -143,10 +154,3 @@ def prim_redrawAll(app,canvas):
     drawHome(app,canvas)
     drawCustomButtons(app,canvas)
     drawKey(app,canvas)
-
-
-def main():
-    runApp(width=800,height=600)
-
-if (__name__ == '__main__'):
-    main()

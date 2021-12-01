@@ -8,10 +8,8 @@ from splashscreen import *
 from createCustomImg import *
 from prims import *
 from gallery import *
+# FILE FUNCTION: Main app, runs whole project
 
-##########################################
-# Main App
-##########################################
 def getGridParams(app):
     gridRows = 10
     gridCols = 10
@@ -32,7 +30,6 @@ def appStarted(app):
     app.timerDelay = 500
     app.screenMargin,app.gridWidth,app.gridHeight = getScreenParams(app)
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
-    print(app.bH,app.bW)
     app.gMode = 'HC1'
     app.savedGraphs = [G2]
     splashStarted(app)

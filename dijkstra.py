@@ -2,6 +2,7 @@ from graphClass import *
 from queue import PriorityQueue
 from backendHelper import *
 import copy
+# FILE FUNCTION: Contains dijkstra's algorithm
 """
 References:
 TA Mini-Lecture:
@@ -42,7 +43,7 @@ def dijkstra(G,root,target):
     if not isConnected(copy.deepcopy(G),root,target):
         return False, []
     cache = [({root},copy.deepcopy(costs),root,root,copy.deepcopy(sorted(Q.queue)))]
-    result = dijkHelper(G,target,Q,costs,path,cache)
+    dijkHelper(G,target,Q,costs,path,cache)
     cache = cleanCache(copy.deepcopy(cache),target)
     return backtrackDijkstra(costs,root,target),cache 
 
@@ -51,7 +52,6 @@ def dijkHelper(G,target,Q,costs,path,cache):
         cache.append((copy.copy(G.seen),copy.deepcopy(costs),target,target,copy.deepcopy(sorted(Q.queue))))
         return
     else:
-        print("GOT HERE")
         (cost,node) = Q.get()
         G.seen.add(node)
         for neighbor in G.getNeighbors(node):
@@ -66,44 +66,3 @@ def dijkHelper(G,target,Q,costs,path,cache):
                 path[node].add(neighbor)
                 cache.append((copy.copy(G.seen),copy.deepcopy(costs),node,neighbor,copy.deepcopy(sorted(Q.queue))))
         dijkHelper(G,target,Q,costs,path,cache)
-
-#NON RECURSIVE IMPLEMENTATION IN CASE:
-
-# def dij(G,root,target):
-#     Q = PriorityQueue()
-#     Q.put((0,root))
-#     costs = setCosts(G,root)
-#     while not Q.empty():
-#         (cost,node) = Q.get()
-#         G.seen.add(node)
-#         for neighbor in G.getNeighbors(node):
-#             if neighbor not in G.seen:
-#                 newCost = cost + G.getEdgeWeight(node,neighbor)
-#                 if newCost < costs[neighbor][0]:
-#                     Q.put((newCost,neighbor))
-#                     costs[neighbor] = (newCost,node)
-#     path = backtrackDijkstra(costs,root,target)
-#     return path
-
-A = Node(4,2,'A')
-B = Node(3,4,'B')
-C = Node(5,4,'C')
-D = Node(7,4,'D')
-E = Node(4,6,'E')
-F = Node(6,6,'F')
-
-testGraph = {
-    A:{B:2,C:4,D:3},
-    B:{A:2},
-    C:{A:4,E:5,F:2},
-    D:{A:3,F:8},
-    E:{C:5},
-    F:{D:8,C:5}
-}
-
-def main():
-    G = Graph(testGraph)
-    print(dijkstra(G,A,F))
-
-if (__name__ == '__main__'):
-    main()

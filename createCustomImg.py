@@ -1,4 +1,5 @@
 from createCustom import *
+# FILE FUNCTION: Allows user to upload image and draw nodes over
 
 def intersectsExistingNode(app,x,y):
     for node in app.nodes:
@@ -40,9 +41,6 @@ def img_mousePressed(app,event):
             resetCustom(app)
         else:
             customImgStarted(app)
-    elif inHomeBounds(app,event.x,event.y):
-        app.mode = 'ss'
-        splashStarted(app)
     elif inOptBounds(app,event.x,event.y):
         app.mode = 'create'
         resetCustom(app)

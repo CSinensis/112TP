@@ -1,5 +1,6 @@
 from cmu_112_graphics import *
 from graphClass import *
+# FILE FUNCTION: Contains all initializing functions + variables
 
 def rgbString(r, g, b):
     return f'#{r:02x}{g:02x}{b:02x}'
@@ -54,13 +55,10 @@ def resetCustom(app):
 def reset(app):
     if app.gMode == 'HC1':
         app.G = getHardcoded1()
-        print("YE",app.G.start,app.G.end)
     elif app.gMode == 'HC2':
         app.G = getHardcoded3()
     elif app.gMode == 'custom':
         app.G = copy.deepcopy(app.customGraph)
-        print(app.G.graph)
-        print("YE",app.G.start,app.G.end)
     app.grid = [[None]*app.gC for row in range(app.gR)]
     app.nodes = []
     app.edges = []
@@ -124,19 +122,18 @@ def getHardcoded1():
     G = Node(7,8,'G')
     H = Node(3,7,'H')
     testGraph = {
-        A:{B:2,C:4,D:3},
-        B:{A:2,H:10},
-        C:{A:4,E:5,F:2},
-        D:{A:3,F:8},
+        A:{B:4,C:5,D:7},
+        B:{A:4,H:10},
+        C:{A:5,E:5,F:3},
+        D:{A:7,F:8},
         E:{C:5,H:6},
-        F:{D:8,C:5,G:3},
+        F:{D:8,C:3,G:3},
         G:{F:3},
         H:{E:6,B:10}
     }
     G = Graph(testGraph)
     G.start = A
-    G.end = H
-    print("NE",G.start,G.end)
+    G.end = F
     return G
 
 def getHardcoded2():
@@ -193,4 +190,3 @@ def getHardcoded3():
     G.start = X
     G.end = Y
     return G
-    

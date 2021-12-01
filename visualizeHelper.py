@@ -2,15 +2,7 @@ from cmu_112_graphics import *
 from graphClass import *
 from startingParams import *
 import math
-# import pygame
-# from pygame.locals import *
-# from pygame import mixer
-# pygame.mixer.init()
-
-# def play():
-#     musicPath = '/Users/nanyu/Documents/GitHub/112TP/Xue Mao Jiao - Xiao Pan Pan & Xiao Feng Feng.mp3'
-#     pygame.mixer.music.load(musicPath)
-#     pygame.mixer.music.play(-1)
+# FILE FUNCTION: Contains helper functions for drawing all screens/buttons
 
 def toggleOptions(app,x,y):
     if app.G.graph != dict() and inAutoBounds(app,x,y):
@@ -285,6 +277,7 @@ def drawWeightedEdges(app,canvas):
         x2,y2 = gridToCoord(app,n2.x,n2.y)
         avgX,avgY = (x1+x2)/2,(y1+y2)/2
         canvas.create_line(x1,y1,x2,y2,fill=edge.color)
+        canvas.create_rectangle(avgX-7,avgY-7,avgX+7,avgY+7,fill=myYellow,width=0)
         canvas.create_text(avgX,avgY,text=f'{math.ceil(edge.weight)}')
 
 def drawNodes(app,canvas):
@@ -308,17 +301,3 @@ def drawAll(app,canvas):
             drawImage(app,canvas)
         else:
             drawGrid(app,canvas)
-
-# def drawOtherGrid(app,canvas):
-#     width = app.bW
-#     height = app.bH
-#     margin = app.gM
-#     gridStartHeight = 1/4*(app.height-2*app.screenMargin) - app.screenMargin + height/2
-#     gridStartWidth = app.screenMargin + width/2
-#     for row in range(app.gR-1):
-#         for col in range(app.gC-1):
-#             canvas.create_rectangle(
-#                 margin+gridStartWidth+width*col,
-#                 margin+gridStartHeight+height*row,
-#                 margin+gridStartWidth+width*(col+1),
-#                 margin+gridStartHeight+height*(row+1))

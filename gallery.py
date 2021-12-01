@@ -1,5 +1,6 @@
 from cmu_112_graphics import *
 from visualizeHelper import *
+# FILE FUNCTION: Displays all saved graphs
 
 def getGraphParams(graph):
     nodes = list(graph)
@@ -27,7 +28,6 @@ def gal_mousePressed(app,event):
                 customImgStarted(app)
                 setGridlessParams(app)
             else:
-                print("CORRECT PLACE")
                 app.mode = 'create'
                 resetCustom(app)
                 app.customGraph = app.savedGraphs[index]
@@ -52,7 +52,6 @@ def setParams(app):
                 newEdge.weight = app.customGraph.graph[node][neighbor]
                 app.edges.append(newEdge)
         seen.add(node)
-    print(app.grid)
 
 def setGridlessParams(app):
     app.nodes = list(app.customGraph.graph)
@@ -64,8 +63,6 @@ def setGridlessParams(app):
                 newEdge.weight = app.customGraph.graph[node][neighbor]
                 app.edges.append(newEdge)
         seen.add(node)
-    print(app.grid)
-
 
 def drawBackground(app,canvas):
     canvas.create_rectangle(app.screenMargin,app.screenMargin,
@@ -141,7 +138,6 @@ def drawMiniNodes(app,canvas,index,nodes):
         canvas.create_text(cx,cy,text=f'{node.label}',font='Arial 9')
 
 def drawMiniImage(app,canvas,i):
-    print(app.customGraph.img)
     cx,cy = gridToCoord(app,5,5,i)
     img = app.savedGraphs[i].img.resize((math.floor(2*app.galW),math.floor(2*(app.galH - app.menuH))),Image.BICUBIC)
     canvas.create_image(cx,cy,image=ImageTk.PhotoImage(img))

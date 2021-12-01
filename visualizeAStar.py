@@ -2,6 +2,7 @@ from cmu_112_graphics import *
 from graphClass import *
 from aStar import *
 from visualizeHelper import *
+# FILE FUNCTION: A* visualization
 
 def aStar_mousePressed(app,event):
     if app.G.graph != dict() and inForBounds(app,event.x,event.y) and (app.cache == None or app.step < len(app.cache)):
@@ -25,13 +26,21 @@ def aStar_timerFired(app):
     elif app.cache != None and app.step < len(app.cache):
         app.auto = False
 
+def aStar_keyPressed(app,event):
+    if app.G.graph != dict() and event.key == 'Right' and (app.cache == None or app.step < len(app.cache)):
+        app.step += 1
+        applyState(app)
+    elif app.G.graph != dict() and event.key == 'Left' and app.step > 0:
+        app.step -= 1
+        applyState(app)
+    elif event.key == 'r':
+        reset(app)
+
 def applyState(app):
     if app.cache == None:
-        print(app.G,app.G.start,app.G.end)
         app.solution,app.cache = aStar(app.G,app.G.start,app.G.end)
     if app.step < len(app.cache):
         state = app.cache[app.step]
-        print(state)
         seen,costs,current,check,Q = state
         edges = pathToEdges(app,costs,current)
         app.Q = Q[:6]
@@ -76,4 +85,3 @@ def aStar_redrawAll(app,canvas):
     drawWeightedEdges(app,canvas)
     drawNodes(app,canvas)
     drawQueueText(app,canvas)
-
