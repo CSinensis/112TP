@@ -1,7 +1,4 @@
-from cmu_112_graphics import *
-from graphClass import *
-from visualizeHelper import *
-from backendHelper import *
+from createCustom import *
 
 def intersectsExistingNode(app,x,y):
     for node in app.nodes:
@@ -20,23 +17,15 @@ def img_mousePressed(app,event):
         x,y = normalize(app,event.x,event.y)
         check = intersectsExistingNode(app,x,y)
         if check != None:
-            if app.setStart == True:
-                app.setStart = False
-                app.customGraph.start = check
-            elif app.setEnd == True:
-                app.setEnd = False
-                app.customGraph.end = check
+            if app.setStart == True or app.setEnd == True:
+                setEdgeNodes(app,check)
             elif app.edgeMode != True:
                 app.edgeMode = True
                 app.prevNode = check
             else:
-                app.edgeMode = False
-                newEdge = Edge(check,app.prevNode)
-                app.edges.append(newEdge)
-                curNode = check
-                app.customGraph.addEdge(curNode,app.prevNode,h(curNode,app.prevNode))
+                addEdgeToGraph(app,check)
         else:
-            addToGraph(app,x,y)
+            addToGraphGridless(app,x,y)
     elif inCustomBounds(app,event.x,event.y):
         app.mode = 'BFS'
         if app.customGraph.graph != dict() and app.customGraph.end == None:
@@ -51,7 +40,7 @@ def img_mousePressed(app,event):
     else:
         toggleCustom(app,event.x,event.y)
 
-def addToGraph(app,x,y):
+def addToGraphGridless(app,x,y):
     newNode = Node(x,y,f'{len(app.nodes)}')
     app.nodes.append(newNode)
     if app.customGraph.start == None:
@@ -62,80 +51,17 @@ def addToGraph(app,x,y):
         app.edges.append(newEdge)
         app.customGraph.addEdge(newNode,app.prevNode,h(newNode,app.prevNode))
 
-def toggleCustom(app,x,y):
-    if inForBounds(app,x,y):
-        app.setStart = True
-    elif inBackBounds(app,x,y):
-        app.setEnd = True
-    elif inAutoBounds(app,x,y) and app.customGraph.graph != dict():
-        if len(app.savedGraphs) < 6:
-            if app.customGraph.end == None:
-                app.customGraph.end = app.nodes[-1]
-            app.savedGraphs.append(copy.deepcopy(app.customGraph))
-            app.customQText = 'Graph saved to gallery'
-        else:
-            app.customQText = 'Already have 6 graphs'
-
-def img_keyPressed(app,event):
-    if event.key == 'u':
-        app.customGraph.img = app.getUserInput('Enter URL for image:')
-        app.image1 = app.loadImage(app.customGraph.img)
-        app.image2 = app.image1.resize((int(790*3/4),int(590*3/4)),Image.BICUBIC)
-        
-def drawEdges(app,canvas):
-    for edge in app.edges:
-        n1,n2 = edge.path
-        x1,y1 = gridToCoord(app,n1.x,n1.y)
-        x2,y2 = gridToCoord(app,n2.x,n2.y)
-        avgX,avgY = (x1+x2)/2,(y1+y2)/2
-        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
-
-def drawNodes(app,canvas):
-    for node in app.nodes:
-        cx,cy = gridToCoord(app,node.x,node.y)
-        r = node.r
-        canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
-        canvas.create_text(cx,cy,text=f'{node.label}')
-
-def drawCustomGraphParams(app,canvas):
-    startH = 1/4*(app.height-2*app.screenMargin) - app.screenMargin
-    startW = 2*app.screenMargin
-    canvas.create_text(startW,startH,text=f'Graph Details - Start Node: {app.customGraph.start} \t End Node: {app.customGraph.end}',anchor='sw')
-
-def drawSetStart(app,canvas):
-    startW,startH,endW,endH = getForBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='purple')
-    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Set Start Node')
-
-def drawSetEnd(app,canvas):
-    startW,startH,endW,endH = getBackBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='cyan')
-    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Set End Node')
-
-def drawSave(app,canvas):
-    startW,startH,endW,endH = getAutoBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='pink')
-    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Save to Gallery')
-
-def drawCustomButtons(app,canvas):
-    drawSetStart(app,canvas)
-    drawSetEnd(app,canvas)
-    drawSave(app,canvas)
-
-def drawCustomQText(app,canvas):
-    QStartW,QStartH = gridToCoord(app,10,4)
-    QStartW += app.gM + 2*app.screenMargin
-    canvas.create_text(QStartW,QStartH,text=app.customQText,anchor='nw')
+# def img_keyPressed(app,event):
+#     if event.key == 'u':
+#         app.customGraph.img = app.getUserInput('Enter URL for image:')
+#         app.image1 = app.loadImage(app.customGraph.img)
+#         app.image2 = app.image1.resize((int(790*3/4),int(590*3/4)),Image.BICUBIC)
 
 def img_redrawAll(app,canvas):
-    startH = 1/4*(app.height-2*app.screenMargin) 
-    startW = 2*app.screenMargin
-    if app.customGraph.img != None:
-        canvas.create_image(startW + app.gridWidth/2,startH + app.gridHeight/2,image=ImageTk.PhotoImage(app.image2))
     drawAll(app,canvas)
+    drawImage(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
     drawCustomGraphParams(app,canvas)
     drawCustomButtons(app,canvas)
     drawCustomQText(app,canvas)
-    drawGrid(app,canvas)

@@ -1,6 +1,7 @@
 from cmu_112_graphics import *
 from graphClass import *
 from startingParams import *
+import math
 # import pygame
 # from pygame.locals import *
 # from pygame import mixer
@@ -255,13 +256,41 @@ def drawGrid(app,canvas):
                 margin+gridStartWidth+width*(col+1),
                 margin+gridStartHeight+height*(row+1),outline='grey70')
 
+def drawImage(app,canvas):
+    startH = 1/4*(app.height-2*app.screenMargin) 
+    startW = 2*app.screenMargin
+    if app.customGraph.img != None:
+        canvas.create_image(startW + app.gridWidth/2,startH + app.gridHeight/2,image=ImageTk.PhotoImage(app.customGraph.img))
+
 def drawGraphParams(app,canvas):
     startH = 1/4*(app.height-2*app.screenMargin) - app.screenMargin
     startW = 2*app.screenMargin
     canvas.create_text(startW,startH,text=f'Graph Details - Start Node: {app.G.start} \t End Node: {app.G.end}',anchor='sw')
 
+def drawEdges(app,canvas,index,edges):
+    for edge in edges:
+        n1,n2 = edge.path
+        x1,y1 = gridToCoord(app,n1.x,n1.y,index)
+        x2,y2 = gridToCoord(app,n2.x,n2.y,index)
+        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
+
+def drawWeightedEdges(app,canvas):
+    for edge in app.edges:
+        n1,n2 = edge.path
+        x1,y1 = gridToCoord(app,n1.x,n1.y)
+        x2,y2 = gridToCoord(app,n2.x,n2.y)
+        avgX,avgY = (x1+x2)/2,(y1+y2)/2
+        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
+        canvas.create_text(avgX,avgY,text=f'{math.ceil(edge.weight)}')
+
+def drawNodes(app,canvas):
+    for node in app.nodes:
+        cx,cy = gridToCoord(app,node.x,node.y)
+        r = node.r
+        canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
+        canvas.create_text(cx,cy,text=f'{node.label}')
+
 def drawAll(app,canvas):
-    drawGrid(app,canvas)
     drawModes(app,canvas)
     drawQueueBox(app,canvas)
     drawGraphOptions(app,canvas)
@@ -271,6 +300,10 @@ def drawAll(app,canvas):
     if app.mode != 'create' and app.mode != 'img':
         drawGraphParams(app,canvas)
         drawButtons(app,canvas)
+        if app.G.imgMode:
+            drawImage(app,canvas)
+        else:
+            drawGrid(app,canvas)
 
 # def drawOtherGrid(app,canvas):
 #     width = app.bW

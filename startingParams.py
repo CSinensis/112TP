@@ -9,6 +9,12 @@ myYellow = rgbString(254, 215, 102)
 myGreen = rgbString(104, 163, 87)
 myRed = rgbString(109, 33, 60)
 
+def customImgStarted(app):
+    app.customGraph.imgMode = True
+    app.url = app.getUserInput('Enter URL for image:')
+    app.image = app.loadImage(app.url)
+    app.customGraph.img = app.image.resize((int(790*3/4),int(590*3/4)),Image.BICUBIC)
+
 def resetCustom(app):
     app.customGraph = Graph(dict())
     app.grid = [[None]*app.gC for row in range(app.gR)]

@@ -106,21 +106,6 @@ def pathToEdges(app,path,current):
                 node = key
     return edges
 
-def drawEdges(app,canvas):
-    for edge in app.edges:
-        n1,n2 = edge.path
-        x1,y1 = gridToCoord(app,n1.x,n1.y)
-        x2,y2 = gridToCoord(app,n2.x,n2.y)
-        avgX,avgY = (x1+x2)/2,(y1+y2)/2
-        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
-
-def drawNodes(app,canvas):
-    for node in app.nodes:
-        cx,cy = gridToCoord(app,node.x,node.y)
-        r = node.r
-        canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
-        canvas.create_text(cx,cy,text=f'{node.label}')
-
 def drawQueueText(app,canvas):
     QStartW,QStartH = gridToCoord(app,10,4)
     QStartW += app.gM + 2*app.screenMargin

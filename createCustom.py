@@ -9,21 +9,13 @@ def create_mousePressed(app,event):
         col = int((event.x - app.screenMargin + app.bW/2)/app.bW)
         row = int((event.y - 1/4*(app.height-2*app.screenMargin) + app.screenMargin + app.bH/2)/app.bH)
         if app.grid[col][row] != None:
-            if app.setStart == True:
-                app.setStart = False
-                app.customGraph.start = app.grid[col][row]
-            elif app.setEnd == True:
-                app.setEnd = False
-                app.customGraph.end = app.grid[col][row]
+            if app.setStart == True or app.setEnd == True:
+                setEdgeNodes(app,app.grid[col][row])
             elif app.edgeMode != True:
                 app.edgeMode = True
                 app.prevNode = app.grid[col][row]
             else:
-                app.edgeMode = False
-                newEdge = Edge(app.grid[col][row],app.prevNode)
-                app.edges.append(newEdge)
-                curNode = app.grid[col][row]
-                app.customGraph.addEdge(curNode,app.prevNode,h(curNode,app.prevNode)+random.randrange(1,5))
+                addEdgeToGraph(app,app.grid[col][row])
         else:
             addToGraph(app,row,col)
     elif inCustomBounds(app,event.x,event.y):
@@ -39,6 +31,21 @@ def create_mousePressed(app,event):
         splashStarted(app)
     else:
         toggleCustom(app,event.x,event.y)
+
+def setEdgeNodes(app,node):
+    if app.setStart == True:
+        app.setStart = False
+        app.customGraph.start = node
+    elif app.setEnd == True:
+        app.setEnd = False
+        app.customGraph.end = node
+
+def addEdgeToGraph(app,node):
+    app.edgeMode = False
+    newEdge = Edge(node,app.prevNode)
+    app.edges.append(newEdge)
+    curNode = node
+    app.customGraph.addEdge(curNode,app.prevNode,h(curNode,app.prevNode)+random.randrange(1,5))
 
 def addToGraph(app,row,col):
     newNode = Node(col,row,f'{len(app.nodes)}')
@@ -67,32 +74,10 @@ def toggleCustom(app,x,y):
             app.customQText = 'Already have 6 graphs'
 
 def create_keyPressed(app,event):
-    if event.key == 's':
-        if app.customGraph.end == None:
-            app.customGraph.end = app.nodes[-1]
-        app.savedGraphs.append(copy.deepcopy(app.customGraph))
-    elif event.key == 'g':
-        app.mode = 'gal'
-        galStarted(app)
-    elif event.key == 'q':
-        app.setStart = True
-    elif event.key == 'w':
-        app.setEnd = True
-
-def drawEdges(app,canvas):
-    for edge in app.edges:
-        n1,n2 = edge.path
-        x1,y1 = gridToCoord(app,n1.x,n1.y)
-        x2,y2 = gridToCoord(app,n2.x,n2.y)
-        avgX,avgY = (x1+x2)/2,(y1+y2)/2
-        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
-
-def drawNodes(app,canvas):
-    for node in app.nodes:
-        cx,cy = gridToCoord(app,node.x,node.y)
-        r = node.r
-        canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
-        canvas.create_text(cx,cy,text=f'{node.label}')
+    if event.key == 'u':
+        app.mode = 'img'
+        resetCustom(app)
+        customImgStarted(app)
 
 def drawCustomGraphParams(app,canvas):
     startH = 1/4*(app.height-2*app.screenMargin) - app.screenMargin
@@ -126,6 +111,7 @@ def drawCustomQText(app,canvas):
 
 def create_redrawAll(app,canvas):
     drawAll(app,canvas)
+    drawGrid(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
     drawCustomGraphParams(app,canvas)

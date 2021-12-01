@@ -96,29 +96,31 @@ def drawGraphs(app,canvas):
     for i in range (len(app.savedGraphs)):
         nodes,edges = getGraphParams(app.savedGraphs[i].graph)
         drawEdges(app,canvas,i,edges)
-        drawNodes(app,canvas,i,nodes)
+        drawMiniNodes(app,canvas,i,nodes)
+        if app.savedGraphs[i].imgMode:
+            drawImage(app,canvas)
 
 def gridToCoord(app,x,y,index):
     coordX = x*app.miniW + app.bounds[index][0]
     coordY = y*app.miniH + app.bounds[index][1]
     return (coordX,coordY)
 
-def drawEdges(app,canvas,index,edges):
-    for edge in edges:
-        n1,n2 = edge.path
-        x1,y1 = gridToCoord(app,n1.x,n1.y,index)
-        x2,y2 = gridToCoord(app,n2.x,n2.y,index)
-        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
-
-def drawNodes(app,canvas,index,nodes):
+def drawMiniNodes(app,canvas,index,nodes):
     for node in nodes:
         cx,cy = gridToCoord(app,node.x,node.y,index)
         r = node.r/2
         canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
         canvas.create_text(cx,cy,text=f'{node.label}',font='Arial 9')
 
+def drawMiniImage(app,canvas):
+    startH = 1/4*(app.height-2*app.screenMargin) 
+    startW = 2*app.screenMargin
+    if app.customGraph.img != None:
+        canvas.create_image(startW + app.gridWidth/2,startH + app.gridHeight/2,image=ImageTk.PhotoImage(app.customGraph.img))
+
 def gal_redrawAll(app,canvas):
     drawBackground(app,canvas)
     drawGal(app,canvas)
     drawGraphs(app,canvas)
     drawHome(app,canvas)
+    
