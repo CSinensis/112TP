@@ -12,6 +12,10 @@ def ss_mousePressed(app,event):
     elif inOptExtra(app,event.x,event.y):
         app.mode = 'gal'
         galStarted(app)
+    elif inMazeBounds(app,event.x,event.y):
+        app.mode = 'prim'
+        primStarted(app)
+
 
 def inOptCustom(app,x,y):
     w1,h1,w2,h2 = getOptCustomBounds(app)
@@ -25,8 +29,19 @@ def inOptExtra(app,x,y):
     w1,h1,w2,h2 = getOptExtraBounds(app)
     return True if ((w1 <= x <= w2) and (h1 <= y <= h2)) else False
 
-# def drawOptBound(app,canvas):
-#     canvas.create_rectangle(app.optStartW,app.optStartH,app.optEndW,app.optEndH,fill=myYellow)
+def inMazeBounds(app,x,y):
+    w1,h1,w2,h2 = getMazeBounds(app)
+    return True if ((w1 <= x <= w2) and (h1 <= y <= h2)) else False
+
+def getMazeBounds(app):
+    w1,h1 = app.optStartW,app.optEndH + 2*app.screenMargin
+    w2,h2 = 2*app.screenMargin + app.optStartW + 3*app.optBoxW,h1 + app.bH
+    return w1,h1,w2,h2
+
+def drawMazeBounds(app,canvas):
+    w1,h1,w2,h2 = getMazeBounds(app)
+    canvas.create_rectangle(w1,h1,w2,h2,fill=myYellow)
+    canvas.create_text((w1+w2)/2,(h1+h2)/2,text='Maze Generation')
 
 def getOptCustomBounds(app):
     w1,h1 = app.optStartW,app.optStartH
@@ -70,5 +85,6 @@ Pathfinding Visualizer'''), font="Arial 50 bold",anchor = 's',justify='center')
     drawOptCustom(app,canvas)
     drawOptVis(app,canvas)
     drawOptExtra(app,canvas)
+    drawMazeBounds(app,canvas)
 
 

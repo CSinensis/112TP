@@ -6,7 +6,7 @@ from visualizeAStar import *
 from createCustom import *
 from splashscreen import *
 from createCustomImg import *
-from help import *
+from prims import *
 from gallery import *
 
 ##########################################
@@ -26,8 +26,7 @@ def getScreenParams(app):
     gridHeight = (app.height - 2*screenMargin)*3/4
     return (screenMargin,gridWidth,gridHeight)
 
-def appStarted(app):
-    G1 = getHardcoded1()
+def appStarted(app): 
     G2 = getHardcoded2()
     app.mode = 'ss'
     app.timerDelay = 500
@@ -35,12 +34,9 @@ def appStarted(app):
     app.gR,app.gC,app.bH,app.bW,app.gM = getGridParams(app)
     print(app.bH,app.bW)
     app.gMode = 'HC1'
-    app.savedGraphs = [G1,G2]
+    app.savedGraphs = [G2]
     splashStarted(app)
-    # galStarted(app)
-    # reset(app)
-    # resetCustom(app)
-
+    
 def main():
     runApp(width=800,height=600)
 
@@ -50,10 +46,12 @@ if (__name__ == '__main__'):
 
 '''
 Things to Fix:
-- Deleting items from gallery
 - help screens
+- some sort of background for edge weights
+- sound?
 
 DONE:
+- Deleting items from gallery
 - Non-connected graphs 
 - Queue needs to not immediately pop the last term 
 - Be able to exit custom mode w/out crashing with blank graph 

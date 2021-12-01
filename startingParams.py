@@ -9,6 +9,29 @@ myYellow = rgbString(254, 215, 102)
 myGreen = rgbString(104, 163, 87)
 myRed = rgbString(109, 33, 60)
 
+def primStarted(app):
+    app.frontier = []
+    app.startX = 2*app.screenMargin
+    app.startY = app.height/4
+    app.rows = 21
+    app.cols = 29
+    app.s = 20
+    app.maze = getMaze(app)
+    app.states = None
+    app.curState = None
+    app.mazeAuto = False
+    app.index = 0
+    app.bannerH = (app.height - 2*app.screenMargin)/5 
+    app.screenH = (app.height - 2*app.screenMargin) - app.bannerH
+    app.timerDelay = 100
+
+def getMaze(app):
+    maze = [[None]*app.cols for row in range(app.rows)]
+    for i in range(app.rows):
+        for j in range(app.cols):
+            maze[i][j] = Cell(i,j)
+    return maze
+
 def customImgStarted(app):
     app.image = app.loadImage(app.customGraph.url)
     app.customGraph.imgMode = True
@@ -46,6 +69,7 @@ def reset(app):
     app.solution = None
     app.Q = []
     app.auto = False
+    app.timerDelay = 500
     app.customMessage = ('''Click here to create
     a custom graph''')
     setGraph(app)
@@ -79,6 +103,17 @@ def getGalBounds(app):
             index += 1
     return bounds
 
+def setGraph(app):
+    app.nodes = list(app.G.graph)
+    seen = set()
+    for node in app.G.graph:
+        for neighbor in app.G.graph[node]:
+            if neighbor not in seen:
+                newEdge = Edge(node,neighbor)
+                newEdge.weight = app.G.graph[node][neighbor]
+                app.edges.append(newEdge)
+        seen.add(node)
+        
 def getHardcoded1():
     A = Node(4,2,'A')
     B = Node(3,4,'B')
@@ -159,13 +194,3 @@ def getHardcoded3():
     G.end = Y
     return G
     
-def setGraph(app):
-    app.nodes = list(app.G.graph)
-    seen = set()
-    for node in app.G.graph:
-        for neighbor in app.G.graph[node]:
-            if neighbor not in seen:
-                newEdge = Edge(node,neighbor)
-                newEdge.weight = app.G.graph[node][neighbor]
-                app.edges.append(newEdge)
-        seen.add(node)

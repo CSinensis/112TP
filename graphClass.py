@@ -75,6 +75,21 @@ class Edge(object):
     def __hash__(self):
         return hash(self.getHashables)
 
+class Cell(object):
+    def __init__(self,row,col):
+        self.row = row
+        self.col = col
+        self.role = 'black'
+        self.walls = [True,True,True,True]
+    
+    def __repr__(self):
+        return f'{self.row},{self.col},{self.role}'
+
+    def draw(self,app,canvas):
+        x = app.startX + self.col*app.s
+        y = app.startY+self.row*app.s
+        canvas.create_rectangle(x,y,x+app.s,y+app.s,fill=self.role,width=0)
+        
 A = Node(4,2,'A')
 B = Node(3,4,'B')
 C = Node(5,4,'C')

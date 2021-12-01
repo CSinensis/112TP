@@ -1,0 +1,43 @@
+Date : 2021-11-30 21:24:20
+Directory : /Users/nanyu/Documents/GitHub/112TP
+Total : 19 files,  2022 codes, 293 comments, 313 blanks, all 2628 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         19 |      2,022 |        293 |        313 |      2,628 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                        |         19 |      2,022 |        293 |        313 |      2,628 |
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                 | language | code       | comment    | blank      | total      |
++----------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/nanyu/Documents/GitHub/112TP/BFS.py               | Python   |         54 |         33 |          6 |         93 |
+| /Users/nanyu/Documents/GitHub/112TP/aStar.py             | Python   |         98 |         16 |          8 |        122 |
+| /Users/nanyu/Documents/GitHub/112TP/backendHelper.py     | Python   |         29 |          0 |          6 |         35 |
+| /Users/nanyu/Documents/GitHub/112TP/cmu_112_graphics.py  | Python   |        509 |        153 |         92 |        754 |
+| /Users/nanyu/Documents/GitHub/112TP/createCustom.py      | Python   |        125 |          0 |         15 |        140 |
+| /Users/nanyu/Documents/GitHub/112TP/createCustomImg.py   | Python   |         75 |          0 |          7 |         82 |
+| /Users/nanyu/Documents/GitHub/112TP/dijkstra.py          | Python   |         70 |         29 |         10 |        109 |
+| /Users/nanyu/Documents/GitHub/112TP/gallery.py           | Python   |        137 |          0 |         17 |        154 |
+| /Users/nanyu/Documents/GitHub/112TP/graphClass.py        | Python   |         73 |          2 |         21 |         96 |
+| /Users/nanyu/Documents/GitHub/112TP/help.py              | Python   |         14 |          0 |          6 |         20 |
+| /Users/nanyu/Documents/GitHub/112TP/main.py              | Python   |         50 |          6 |          8 |         64 |
+| /Users/nanyu/Documents/GitHub/112TP/splashscreen.py      | Python   |         56 |          4 |         15 |         75 |
+| /Users/nanyu/Documents/GitHub/112TP/startingParams.py    | Python   |        159 |          0 |         12 |        171 |
+| /Users/nanyu/Documents/GitHub/112TP/underlayImage.py     | Python   |         36 |          3 |         10 |         49 |
+| /Users/nanyu/Documents/GitHub/112TP/visualizeAStar.py    | Python   |         72 |          0 |          8 |         80 |
+| /Users/nanyu/Documents/GitHub/112TP/visualizeBFS.py      | Python   |         91 |         25 |         10 |        126 |
+| /Users/nanyu/Documents/GitHub/112TP/visualizeDijkstra.py | Python   |         72 |          0 |          7 |         79 |
+| /Users/nanyu/Documents/GitHub/112TP/visualizeHelper.py   | Python   |        256 |         21 |         47 |        324 |
+| /Users/nanyu/Documents/GitHub/112TP/visualizeTest.py     | Python   |         46 |          1 |          8 |         55 |
+| Total                                                    |          |      2,022 |        293 |        313 |      2,628 |
++----------------------------------------------------------+----------+------------+------------+------------+------------+
