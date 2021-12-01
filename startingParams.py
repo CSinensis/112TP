@@ -10,9 +10,8 @@ myGreen = rgbString(104, 163, 87)
 myRed = rgbString(109, 33, 60)
 
 def customImgStarted(app):
+    app.image = app.loadImage(app.customGraph.url)
     app.customGraph.imgMode = True
-    app.url = app.getUserInput('Enter URL for image:')
-    app.image = app.loadImage(app.url)
     app.customGraph.img = app.image.resize((int(790*3/4),int(590*3/4)),Image.BICUBIC)
 
 def resetCustom(app):
@@ -25,7 +24,6 @@ def resetCustom(app):
     app.setStart = False
     app.setEnd = False
     app.Q = []
-    app.url = None
     app.customQText = ''
     app.customMessage = '''Click here to exit 
     editing mode'''

@@ -34,9 +34,18 @@ def img_mousePressed(app,event):
         reset(app)
     elif inResetBounds(app,event.x,event.y):
         resetCustom(app)
+        app.customGraph.url = app.getUserInput('Enter URL for image:')
+        if app.customGraph.url == None:
+            app.mode = 'create'
+            resetCustom(app)
+        else:
+            customImgStarted(app)
     elif inHomeBounds(app,event.x,event.y):
         app.mode = 'ss'
         splashStarted(app)
+    elif inOptBounds(app,event.x,event.y):
+        app.mode = 'create'
+        resetCustom(app)
     else:
         toggleCustom(app,event.x,event.y)
 
@@ -51,17 +60,23 @@ def addToGraphGridless(app,x,y):
         app.edges.append(newEdge)
         app.customGraph.addEdge(newNode,app.prevNode,h(newNode,app.prevNode))
 
-# def img_keyPressed(app,event):
-#     if event.key == 'u':
-#         app.customGraph.img = app.getUserInput('Enter URL for image:')
-#         app.image1 = app.loadImage(app.customGraph.img)
-#         app.image2 = app.image1.resize((int(790*3/4),int(590*3/4)),Image.BICUBIC)
+def drawOutline(app,canvas):
+    startH = 1/4*(app.height-2*app.screenMargin) 
+    startW = 2*app.screenMargin
+    canvas.create_rectangle(startW,startH,startW + app.gridWidth,startH + app.gridHeight)
+
+def drawImgOpt(app,canvas):
+    startW,startH,endW,endH = getOptBounds(app)
+    canvas.create_rectangle(startW,startH,endW,endH,fill=myGreen)
+    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Click here to\nreturn to grid')
 
 def img_redrawAll(app,canvas):
     drawAll(app,canvas)
     drawImage(app,canvas)
+    drawOutline(app,canvas)
     drawEdges(app,canvas)
     drawNodes(app,canvas)
     drawCustomGraphParams(app,canvas)
     drawCustomButtons(app,canvas)
     drawCustomQText(app,canvas)
+    drawImgOpt(app,canvas)

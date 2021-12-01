@@ -102,7 +102,7 @@ def getCustomBounds(app):
 
 def drawCustom(app,canvas):
     startW,startH,endW,endH = getCustomBounds(app)
-    if app.mode == 'create':
+    if app.mode == 'create' or app.mode == 'img':
         c = myGreen
     else:
         c = 'grey70'
@@ -140,6 +140,10 @@ def inHC2Bounds(app,x,y):
     startW,startH,endW,endH = getHC2Bounds(app)
     return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
 
+def inOptBounds(app,x,y):
+    startW,startH,endW,endH = getOptBounds(app)
+    return True if ((startW <= x <= endW) and (startH <= y <= endH)) else False
+
 def getHC1Bounds(app):
     startW,startH,endW,endH = getOptBounds(app)
     midH = (startH + endH)/2
@@ -151,7 +155,7 @@ def getHC2Bounds(app):
     return startW,midH,endW,endH
 
 def drawGraphOptions(app,canvas):
-    startW,startH,endW,midH = startW,startH,endW,endH = getOptBounds(app)
+    startW,startH,endW,endH = getOptBounds(app)
     midH = (startH + endH)/2
     if app.gMode == 'HC1':
         c1,c2 = myGreen,'grey70'
@@ -194,17 +198,17 @@ def getAutoBounds(app):
 
 def drawStepForward(app,canvas):
     startW,startH,endW,endH = getForBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='purple')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='MediumPurple3')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Step Forwards')
 
 def drawStepBackward(app,canvas):
     startW,startH,endW,endH = getBackBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='cyan')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='medium turquoise')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Step Backwards')
 
 def drawStepAuto(app,canvas):
     startW,startH,endW,endH = getAutoBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='pink')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='light coral')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Run Automatically')
 
 def drawButtons(app,canvas):
@@ -267,11 +271,11 @@ def drawGraphParams(app,canvas):
     startW = 2*app.screenMargin
     canvas.create_text(startW,startH,text=f'Graph Details - Start Node: {app.G.start} \t End Node: {app.G.end}',anchor='sw')
 
-def drawEdges(app,canvas,index,edges):
-    for edge in edges:
+def drawEdges(app,canvas):
+    for edge in app.edges:
         n1,n2 = edge.path
-        x1,y1 = gridToCoord(app,n1.x,n1.y,index)
-        x2,y2 = gridToCoord(app,n2.x,n2.y,index)
+        x1,y1 = gridToCoord(app,n1.x,n1.y)
+        x2,y2 = gridToCoord(app,n2.x,n2.y)
         canvas.create_line(x1,y1,x2,y2,fill=edge.color)
 
 def drawWeightedEdges(app,canvas):
@@ -293,11 +297,11 @@ def drawNodes(app,canvas):
 def drawAll(app,canvas):
     drawModes(app,canvas)
     drawQueueBox(app,canvas)
-    drawGraphOptions(app,canvas)
     drawCustom(app,canvas)
     drawReset(app,canvas)
     drawHome(app,canvas)
     if app.mode != 'create' and app.mode != 'img':
+        drawGraphOptions(app,canvas)
         drawGraphParams(app,canvas)
         drawButtons(app,canvas)
         if app.G.imgMode:

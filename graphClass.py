@@ -8,6 +8,7 @@ class Graph(object):
         self.end = None
         self.img = None
         self.imgMode = False
+        self.url = None
     
     def __repr__(self):
         return f'{self.graph}'

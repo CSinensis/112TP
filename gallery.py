@@ -20,10 +20,18 @@ def gal_mousePressed(app,event):
         if inDeleteBounds(app,event.x,event.y,index):
             app.savedGraphs.pop(index)
         elif inEditBounds(app,event.x,event.y,index):
-            app.mode = 'create'
-            resetCustom(app)
-            app.customGraph = app.savedGraphs[index]
-            setParams(app)
+            if app.savedGraphs[index].imgMode:
+                app.mode = 'img'
+                resetCustom(app)
+                app.customGraph = app.savedGraphs[index]
+                customImgStarted(app)
+                setGridlessParams(app)
+            else:
+                print("CORRECT PLACE")
+                app.mode = 'create'
+                resetCustom(app)
+                app.customGraph = app.savedGraphs[index]
+                setParams(app)
         else:
             app.mode = 'BFS'
             app.gMode = 'custom'
@@ -45,6 +53,19 @@ def setParams(app):
                 app.edges.append(newEdge)
         seen.add(node)
     print(app.grid)
+
+def setGridlessParams(app):
+    app.nodes = list(app.customGraph.graph)
+    seen = set()
+    for node in app.customGraph.graph:
+        for neighbor in app.customGraph.graph[node]:
+            if neighbor not in seen:
+                newEdge = Edge(node,neighbor)
+                newEdge.weight = app.customGraph.graph[node][neighbor]
+                app.edges.append(newEdge)
+        seen.add(node)
+    print(app.grid)
+
 
 def drawBackground(app,canvas):
     canvas.create_rectangle(app.screenMargin,app.screenMargin,
@@ -87,7 +108,7 @@ def drawGal(app,canvas):
             cx = app.screenMargin + app.galW + app.galM + (j)*(2*app.galW+app.galM)
             cy = app.screenMargin + app.galH + app.galM + (i)*(2*app.galH+app.galM) + app.bannerH
             canvas.create_rectangle(cx-app.galW,cy-app.galH,cx+app.galW,cy+app.galH,fill='white')
-            canvas.create_rectangle(cx-app.galW,cy+app.galH-2*app.menuH,cx,cy+app.galH,fill=myYellow)
+            canvas.create_rectangle(cx-app.galW,cy+app.galH-2*app.menuH,cx,cy+app.galH,fill=myGreen)
             canvas.create_text((2*cx-app.galW)/2,cy+app.galH-app.menuH,text='Edit',font = 'Arial 20')
             canvas.create_rectangle(cx,cy+app.galH-2*app.menuH,cx+app.galW,cy+app.galH,fill='red3')
             canvas.create_text((2*cx+app.galW)/2,cy+app.galH-app.menuH,text='Delete',font = 'Arial 20')
@@ -95,15 +116,22 @@ def drawGal(app,canvas):
 def drawGraphs(app,canvas):
     for i in range (len(app.savedGraphs)):
         nodes,edges = getGraphParams(app.savedGraphs[i].graph)
-        drawEdges(app,canvas,i,edges)
-        drawMiniNodes(app,canvas,i,nodes)
         if app.savedGraphs[i].imgMode:
-            drawImage(app,canvas)
+            drawMiniImage(app,canvas,i)
+        drawMiniEdges(app,canvas,i,edges)
+        drawMiniNodes(app,canvas,i,nodes)
 
 def gridToCoord(app,x,y,index):
     coordX = x*app.miniW + app.bounds[index][0]
     coordY = y*app.miniH + app.bounds[index][1]
     return (coordX,coordY)
+
+def drawMiniEdges(app,canvas,index,edges):
+    for edge in edges:
+        n1,n2 = edge.path
+        x1,y1 = gridToCoord(app,n1.x,n1.y,index)
+        x2,y2 = gridToCoord(app,n2.x,n2.y,index)
+        canvas.create_line(x1,y1,x2,y2,fill=edge.color)
 
 def drawMiniNodes(app,canvas,index,nodes):
     for node in nodes:
@@ -112,11 +140,11 @@ def drawMiniNodes(app,canvas,index,nodes):
         canvas.create_oval(cx-r,cy-r,cx+r,cy+r,fill=node.color)
         canvas.create_text(cx,cy,text=f'{node.label}',font='Arial 9')
 
-def drawMiniImage(app,canvas):
-    startH = 1/4*(app.height-2*app.screenMargin) 
-    startW = 2*app.screenMargin
-    if app.customGraph.img != None:
-        canvas.create_image(startW + app.gridWidth/2,startH + app.gridHeight/2,image=ImageTk.PhotoImage(app.customGraph.img))
+def drawMiniImage(app,canvas,i):
+    print(app.customGraph.img)
+    cx,cy = gridToCoord(app,5,5,i)
+    img = app.savedGraphs[i].img.resize((math.floor(2*app.galW),math.floor(2*(app.galH - app.menuH))),Image.BICUBIC)
+    canvas.create_image(cx,cy,image=ImageTk.PhotoImage(img))
 
 def gal_redrawAll(app,canvas):
     drawBackground(app,canvas)

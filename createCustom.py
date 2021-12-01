@@ -29,6 +29,15 @@ def create_mousePressed(app,event):
     elif inHomeBounds(app,event.x,event.y):
         app.mode = 'ss'
         splashStarted(app)
+    elif inOptBounds(app,event.x,event.y):
+        app.mode = 'img'
+        resetCustom(app)
+        app.customGraph.url = app.getUserInput('Enter URL for image:')
+        if app.customGraph.url == None:
+            app.mode = 'create'
+            resetCustom(app)
+        else:
+            customImgStarted(app)
     else:
         toggleCustom(app,event.x,event.y)
 
@@ -77,7 +86,12 @@ def create_keyPressed(app,event):
     if event.key == 'u':
         app.mode = 'img'
         resetCustom(app)
-        customImgStarted(app)
+        app.customGraph.url = app.getUserInput('Enter URL for image:')
+        if app.customGraph.url == None:
+            app.mode = 'create'
+            resetCustom(app)
+        else:
+            customImgStarted(app)
 
 def drawCustomGraphParams(app,canvas):
     startH = 1/4*(app.height-2*app.screenMargin) - app.screenMargin
@@ -86,17 +100,17 @@ def drawCustomGraphParams(app,canvas):
 
 def drawSetStart(app,canvas):
     startW,startH,endW,endH = getForBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='purple')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='MediumPurple3')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Set Start Node')
 
 def drawSetEnd(app,canvas):
     startW,startH,endW,endH = getBackBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='cyan')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='medium turquoise')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Set End Node')
 
 def drawSave(app,canvas):
     startW,startH,endW,endH = getAutoBounds(app)
-    canvas.create_rectangle(startW,startH,endW,endH,fill='pink')
+    canvas.create_rectangle(startW,startH,endW,endH,fill='light coral')
     canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Save to Gallery')
 
 def drawCustomButtons(app,canvas):
@@ -109,6 +123,11 @@ def drawCustomQText(app,canvas):
     QStartW += app.gM + 2*app.screenMargin
     canvas.create_text(QStartW,QStartH,text=app.customQText,anchor='nw')
 
+def drawImgOpt(app,canvas):
+    startW,startH,endW,endH = getOptBounds(app)
+    canvas.create_rectangle(startW,startH,endW,endH,fill='grey70')
+    canvas.create_text((startW+endW)/2,(startH+endH)/2,text='Click here to\nimport image')
+
 def create_redrawAll(app,canvas):
     drawAll(app,canvas)
     drawGrid(app,canvas)
@@ -117,3 +136,4 @@ def create_redrawAll(app,canvas):
     drawCustomGraphParams(app,canvas)
     drawCustomButtons(app,canvas)
     drawCustomQText(app,canvas)
+    drawImgOpt(app,canvas)
